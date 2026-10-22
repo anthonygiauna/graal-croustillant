@@ -1,0 +1,11 @@
+# Déploiement Render (Blueprint) : site statique gratuit, aucun build (le jeu tourne tel quel dans le navigateur).
+services:
+  - type: web
+    name: graal-croustillant
+    runtime: static
+    buildCommand: echo "Rien à construire"
+    staticPublishPath: .
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: no-cache

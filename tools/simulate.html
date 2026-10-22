@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bot de simulation – Le Graal Croustillant</title>
+<style>
+  body { font: 14px/1.4 system-ui, sans-serif; margin: 16px; background: #fbf3e0; color: #2a1a0a; }
+  table { border-collapse: collapse; } td, th { padding: 3px 8px; border-bottom: 1px solid #e3d3b0; text-align: right; }
+  .bad { color: #b3261e; font-weight: 600; } button { font-size: 16px; padding: 8px 14px; margin-right: 8px; }
+</style>
+</head>
+<body>
+<h1>Bot de simulation</h1>
+<p>Le bot joue chaque niveau 200 fois : il choisit le meilleur coup (comme l'aide automatique) mais joue au hasard une fois sur quatre,
+et n'utilise ni compagnon ni les +5 coups de Merlin. Objectif : 40 à 70 % de réussite.</p>
+<p>
+  <button id="run">Mesurer (200 parties par niveau)</button>
+  <button id="tune">Régler les coups puis mesurer</button>
+  <label><input id="save" type="checkbox"> Enregistrer dans data/levels.json (serveur local)</label>
+</p>
+<p id="status"></p>
+<table><thead><tr><th>Niv.</th><th>Coups</th><th>Objectifs</th><th>Réussite</th><th>Coups restants (moy.)</th><th>Étoiles 2 / 3</th><th>Temps</th></tr></thead><tbody id="rows"></tbody></table>
+<script type="module">
+  import { prepare } from '../js/levels.js';
+  const raw = await (await fetch('../data/levels.json', { cache: 'no-store' })).json();
+  const { levels } = prepare(raw);
+  const only = new URLSearchParams(location.search).get('levels');
+  const pick = only ? levels.filter(l => only.split(',').map(Number).includes(l.id)) : levels;
+  const target = l => (l.id <= 3 ? 0.68 : l.boss ? 0.45 : 0.56);
+
+  async function go(tune) {
+    const t0 = performance.now();
+    const results = [];
+    const queue = pick.slice();
+    const nw = Math.max(1, (navigator.hardwareConcurrency || 4) - 1);
+    let done = 0;
+    await Promise.all(Array.from({ length: nw }, () => new Promise(resolve => {
+      const w = new Worker('./sim-worker.js', { type: 'module' });
+      const next = () => {
+        const l = queue.shift();
+        if (!l) { w.terminate(); return resolve(); }
+        w.postMessage({ level: l, target: target(l), tune, games: 200 });
+      };
+      w.onmessage = ({ data }) => { results.push(data); done++; document.getElementById('status').textContent = `${done} / ${pick.length} niveaux…`; next(); };
+      next();
+    })));
+    results.sort((a, b) => a.id - b.id);
+    document.getElementById('rows').innerHTML = results.map(r => {
+      const l = levels.find(x => x.id === r.id);
+      const st = starsOf(r);
+      return `<tr><td>${r.id}${l.boss ? ' ★' : ''}</td><td>${r.moves}</td><td style="text-align:left">${goalText(r.goals)}</td><td class="${r.rate < 0.4 || r.rate > 0.7 ? 'bad' : ''}">${Math.round(r.rate * 100)} %</td><td>${r.avgLeft.toFixed(1)}</td><td>${st[1]} / ${st[2]}</td><td>${(r.ms / 1000).toFixed(1)} s</td></tr>`;
+    }).join('');
+    const ok = results.filter(r => r.rate >= 0.4 && r.rate <= 0.7).length;
+    document.getElementById('status').textContent = `Terminé en ${((performance.now() - t0) / 1000).toFixed(0)} s : ${ok} / ${results.length} niveaux entre 40 et 70 %.`;
+    window.__sim = results;
+    if (document.getElementById('save').checked) await save(results);
+  }
+
+  function starsOf(r) {
+    const score = r.goals.find(x => x.type === 'score');
+    const s1 = score ? score.target : 0;
+    const round = v => Math.round(v / 100) * 100;
+    const s2 = Math.max(round(r.p50), round(s1 * 1.25));
+    const s3 = Math.max(round(r.p85), s2 + 500);
+    return [s1, s2, s3];
+  }
+
+  const NAMES = ['Graal', 'Fromage', 'Épée', 'Chope', 'Bouclier', 'Couronne'];
+  const goalText = gs => gs.map(x => x.type === 'score' ? `score ${x.target}` : x.type === 'collect' ? `${x.count} ${NAMES[x.color]}` : x.type === 'relic' ? `${x.count} reliques` : x.type === 'web' ? 'toiles' : 'pierres').join(', ');
+
+  async function save(results) {
+    for (const r of results) {
+      const lv = raw.levels.find(x => x.id === r.id);
+      lv.moves = r.moves;
+      lv.goals = r.goals;
+      lv.stars = starsOf(r);
+    }
+    const j = v => JSON.stringify(v);
+    const text = `{\n  "about": ${j(raw.about)},\n  "chapters": [\n    ${raw.chapters.map(j).join(',\n    ')}\n  ],\n  "shapes": {\n` +
+      Object.entries(raw.shapes).map(([k, v]) => `    ${j(k)}: ${j(v)}`).join(',\n') + `\n  },\n  "levels": [\n    ${raw.levels.map(j).join(',\n    ')}\n  ]\n}\n`;
+    await fetch('/__save?f=data/levels.json', { method: 'POST', body: text });
+    const report = '# Résultats du bot (200 parties par niveau)\n\n| Niveau | Coups | Réussite | Coups restants (moy.) |\n|---|---|---|---|\n' +
+      results.map(r => `| ${r.id} | ${r.moves} | ${goalText(r.goals)} | ${Math.round(r.rate * 100)} % | ${r.avgLeft.toFixed(1)} |`).join('\n') + '\n';
+    await fetch('/__save?f=data/simulation.md', { method: 'POST', body: report });
+    document.getElementById('status').textContent += ' Enregistré.';
+  }
+
+  document.getElementById('run').onclick = () => go(false);
+  document.getElementById('tune').onclick = () => go(true);
+  window.__go = go;
+</script>
+</body>
+</html>

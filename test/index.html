@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tests – Le Graal Croustillant</title>
+<style>
+  body { font: 15px/1.4 system-ui, sans-serif; margin: 16px; background: #fbf3e0; color: #2a1a0a; }
+  .ok { color: #1d7a32; } .ko { color: #b3261e; font-weight: 600; }
+  pre { white-space: pre-wrap; background: #fff; padding: 6px; border-radius: 6px; }
+</style>
+</head>
+<body>
+<h1>Tests du moteur</h1>
+<p id="sum">En cours…</p>
+<div id="out"></div>
+<script type="module">
+  const files = ['./engine.test.js', './hint.test.js'];
+  const tests = [];
+  window.test = (name, fn) => tests.push({ name, fn });
+  for (const f of files) await import(f);
+  const out = document.getElementById('out');
+  let pass = 0, fail = 0;
+  const fails = [];
+  for (const t of tests) {
+    const div = document.createElement('div');
+    try { await t.fn(); pass++; div.className = 'ok'; div.textContent = '✔ ' + t.name; }
+    catch (e) { fail++; div.className = 'ko'; div.innerHTML = '✘ ' + t.name + '<pre>' + (e && e.stack || e) + '</pre>'; fails.push(t.name + ' : ' + (e && e.message)); }
+    out.appendChild(div);
+  }
+  document.getElementById('sum').textContent = `${pass} réussis, ${fail} échoués`;
+  window.__results = { pass, fail, fails };
+</script>
+</body>
+</html>
