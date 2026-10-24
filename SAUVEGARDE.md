@@ -1,6 +1,7 @@
 # Sauvegarde du Graal Croustillant (23/10/2026)
 
-- Lien pour jouer (claude.ai, privé, à partager depuis le menu Partager) : https://claude.ai/artifact/ALKRtWWhv2AkBKhwFxav1k
+- **Adresse du jeu (Render, publique, installable, hors ligne) : https://graal-croustillant.onrender.com**
+- Ancien lien claude.ai (privé) : https://claude.ai/artifact/ALKRtWWhv2AkBKhwFxav1k
 - Code source : https://github.com/anthonygiauna/graal-croustillant (et ce dossier).
 - Jouer en local : `powershell -ExecutionPolicy Bypass -File tools\serve.ps1`, puis http://localhost:8790/ (voir LISEZMOI.md).
 
@@ -17,5 +18,5 @@ Pour sauvegarder une progression plus récente : Réglages → « Copier mon cod
 
 ## Si un jour on reprend
 
-- Mise en ligne Render pas faite : render.com → New → Blueprint → dépôt `graal-croustillant` → Apply (`render.yaml` est prêt).
+- Mise en ligne Render faite le 24/10/2026 (site statique branché sur le dépôt public : pour publier une modification, relancer « Manual Deploy » dans Render, et changer `VERSION` dans `sw.js`).
 - Difficulté réglée par le bot : 59 niveaux sur 60 entre 40 et 70 % de réussite ; le niveau 50 (39,5 %) a reçu un coup de plus, sans nouvelle mesure (rapport dans data/simulation.md).
