@@ -525,6 +525,25 @@ export function usePower(g, power, t, ev) {
       blast = { cells, fx: cells.map(i => ({ k: 'poof', i, area: [i] })) };
       break;
     }
+    case 'goal6': { // Keu : la couleur d'un objectif de collecte pas encore atteint, sinon la plus fréquente
+      const want = goalState(g).find(x => x.type === 'collect' && !x.done && colorCells(g, x.color).length);
+      const cells = colorCells(g, want ? want.color : commonColor(g));
+      while (cells.length > 6) cells.splice(ri(g.rng, cells.length), 1);
+      blast = { cells, fx: cells.map(i => ({ k: 'poof', i, area: [i] })) };
+      break;
+    }
+    case 'arrows': { // Tristan : une pièce au hasard dans chaque colonne
+      const cells = [];
+      for (let c = 0; c < W; c++) {
+        const col = colCells(g, c).filter(i => g.cells[i] && !g.cells[i].relic);
+        if (col.length) cells.push(col[ri(g.rng, col.length)]);
+      }
+      blast = { cells, fx: cells.map(i => ({ k: 'poof', i, area: [i] })) };
+      break;
+    }
+    case 'bombs2': // Galaad
+      convert(randomCells(g, 2, q => !q.relic && !q.sp), q => piece(g, q.c, 'bomb'));
+      return true;
     default: return false;
   }
   resolve(g, ev, null, blast);

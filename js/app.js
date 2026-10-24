@@ -1,7 +1,8 @@
 // Interface du jeu : écrans, partie, progression, personnages, trophées, réglages.
 import * as E from './engine.js';
 import { loadLevels } from './levels.js';
-import { CHARACTERS, TROPHIES, DIALOGUES, TUTORIALS, MERLIN_QUIPS, SHUFFLE_QUIPS, WIN_QUIPS, LOSE_QUIPS, COMBO_WORDS, unlockText, starsTotal } from './data.js';
+import { CHARACTERS, TROPHIES, DIALOGUES, TUTORIALS, MERLIN_QUIPS, SHUFFLE_QUIPS, WIN_QUIPS, LOSE_QUIPS, COMBO_WORDS, DECOR, goldFor, unlockText, starsTotal } from './data.js';
+import { courtyard } from './courtyard.js';
 import { portrait, medal, scene, svgUrl, pieceIcon, merlinFace, narratorIcon } from './art.js';
 import { play, unlockAudio, setSfx, setMusic, vibrate } from './audio.js';
 import { BoardView } from './board.js';
@@ -13,6 +14,9 @@ const pick = a => a[Math.floor(Math.random() * a.length)];
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const charById = id => CHARACTERS.find(c => c.id === id);
 const THEMES = ['cour', 'foret', 'lac', 'marais', 'morgane', 'quete'];
+// Décor d'un chapitre ; la cour du château montre les compagnons débloqués et les décorations achetées.
+const camelotSvg = () => courtyard({ chars: CHARACTERS.filter(c => S.unlocked.includes(c.id)), decor: S.decor || [] });
+const sceneOf = theme => (theme === 'cour' ? camelotSvg() : scene(theme));
 
 let S = Save.load();
 let DATA = null;
@@ -93,7 +97,7 @@ function showUnlocks(then) {
 // ---------- Écran titre ----------
 function title() {
   stopGame();
-  main.innerHTML = `<div class="screen title" style="background-image:${svgUrl(scene('cour'))}">
+  main.innerHTML = `<div class="screen title" style="background-image:${svgUrl(camelotSvg())}">
     <div class="logo">
       <img class="logo-grail" src="${pieceIcon({ c: -1, sp: 'grail' }, 160)}" alt="">
       <h1>Le Graal<span>Croustillant</span></h1>
@@ -102,6 +106,7 @@ function title() {
     </div>
     <nav class="menu">
       <button class="btn big gold" data-act="map">${S.levels[1] ? 'Continuer' : 'Jouer'}</button>
+      <button class="btn" data-act="camelot">Restaurer Camelot <small>${S.gold || 0} pièces d'or</small></button>
       <button class="btn" data-act="gallery">Personnages <small>${S.unlocked.length} / ${CHARACTERS.length}</small></button>
       <button class="btn" data-act="trophies">Salle des trophées <small>${Object.keys(S.trophies).length} / ${TROPHIES.length}</small></button>
       <button class="btn" data-act="settings">Réglages</button>
@@ -127,7 +132,7 @@ function mapScreen(focus) {
     }).join('');
     const done = lv.filter(l => S.levels[l.id]).length;
     return `<section class="chapter t-${ch.theme}" id="ch${ch.id}">
-      <div class="ch-head" style="background-image:${svgUrl(scene(ch.theme))}">
+      <div class="ch-head" style="background-image:${svgUrl(sceneOf(ch.theme))}">
         <span>Chapitre ${ch.id} · ${done}/10</span><h3>${esc(ch.name)}</h3>
         <button class="btn small" data-act="story" data-ch="${ch.id}">Revoir l'histoire</button>
       </div>
@@ -162,7 +167,7 @@ function dialogue(key, then) {
     const c = charById(who);
     const name = c ? c.name : who === 'tous' ? 'Tout le monde' : 'Le narrateur';
     const pic = c ? portrait(c) : narratorIcon();
-    modal(`<div class="dlg-scene" style="background-image:${svgUrl(scene(theme))}">
+    modal(`<div class="dlg-scene" style="background-image:${svgUrl(sceneOf(theme))}">
         <p class="dlg-title">${key === 'fin' ? 'Épilogue' : `Chapitre ${key} · ${esc(DATA.chapters[key - 1].name)}`}</p>
       </div>
       <div class="dlg-line ${k % 2 ? 'right' : ''}" data-act="dlgNext">
@@ -227,7 +232,7 @@ function startGame(id) {
   const g = E.newGame(level);
   const comp = charById(S.companion);
   if (new Date().getHours() < 5) S.stats.midnight++;
-  main.innerHTML = `<div class="screen game t-${THEMES[level.chapter - 1]}" style="background-image:${svgUrl(scene(THEMES[level.chapter - 1]))}">
+  main.innerHTML = `<div class="screen game t-${THEMES[level.chapter - 1]}" style="background-image:${svgUrl(sceneOf(THEMES[level.chapter - 1]))}">
     <header class="hud">
       <div class="moves"><small>Coups</small><b id="moves">${g.moves}</b></div>
       <div class="goals" id="goals"></div>
@@ -411,7 +416,7 @@ async function win() {
     if (!G) return;
     const ev = [];
     E.bonusPhase(G.g, ev);
-    G.view.speed = 1.7;
+    G.view.speed = 2.6;
     await G.view.play(ev, hooks);
     if (!G) return;
     hideBanner();
@@ -424,6 +429,8 @@ async function win() {
   S.stats.wins++;
   S.stats.maxLeft = Math.max(S.stats.maxLeft, left);
   if (left === 0) S.stats.lastMoveWins++;
+  const gold = goldFor(left);
+  S.gold = (S.gold || 0) + gold;
   checkTrophies();
   persist();
   play('win'); vibrate([60, 60, 120], S.settings.vibrate);
@@ -431,6 +438,7 @@ async function win() {
   modal(`<p class="kicker">Niveau ${id} réussi${S.name ? `, ${esc(S.name)}` : ""} !</p>
     <div class="big-stars">${[1, 2, 3].map(k => `<span class="${k <= stars ? 'on' : ''}" style="--d:${k * 0.35}s">★</span>`).join('')}</div>
     <p class="final-score">${g.score.toLocaleString('fr-FR')} points${record ? ' <em>Record !</em>' : ''}</p>
+    <p class="gold-reward">${gold ? `<span class="coin"></span> +${gold} pièce${gold > 1 ? 's' : ''} d'or pour ${left} coup${left > 1 ? 's' : ''} d'avance${left >= 10 ? ' (coffre royal : double !)' : ''}` : 'Gagne avec des coups d\x27avance pour gagner de l\x27or et restaurer Camelot.'}</p>
     <div class="bubble">${esc(pick(WIN_QUIPS))}</div>
     <div class="row">
       <button class="btn" data-act="map">Carte</button>
@@ -461,6 +469,37 @@ function giveUp() {
     <div class="big-stars lost"><span>★</span><span>★</span><span>★</span></div>
     <div class="bubble">${esc(pick(LOSE_QUIPS))}</div>
     <div class="row"><button class="btn" data-act="map">Carte</button><button class="btn big gold" data-act="go" data-id="${G.id}">Réessayer</button></div>`, 'result lose');
+}
+
+// ---------- Restaurer Camelot (récompenses des coups d'avance) ----------
+function camelotScreen() {
+  stopGame();
+  const owned = S.decor || [];
+  main.innerHTML = `<div class="screen list-screen">
+    <header class="bar"><button class="btn icon" data-act="title" aria-label="Retour">‹</button><h2>Restaurer Camelot</h2><span class="pill"><span class="coin"></span> ${S.gold || 0}</span></header>
+    <div class="scroll">
+      <div class="camelot-view">${camelotSvg()}</div>
+      <p class="camelot-help">Chaque coup d'avance à la fin d'un niveau rapporte une pièce d'or (le double à partir de 10 coups). Les compagnons débloqués s'installent dans la cour.</p>
+      <ul class="decor-list">${DECOR.map(d => {
+        const have = owned.includes(d.id), afford = (S.gold || 0) >= d.cost;
+        return `<li class="${have ? 'on' : ''}"><div><b>${esc(d.name)}</b><small>${esc(d.desc)}</small></div>
+          ${have ? '<span class="owned">✔ Installé</span>' : `<button class="btn small ${afford ? 'gold' : ''}" data-act="buyDecor" data-id="${d.id}" aria-label="Installer pour ${d.cost} pièces d'or"><span class="coin"></span> ${d.cost}</button>`}</li>`;
+      }).join('')}</ul>
+    </div></div>`;
+}
+
+function buyDecor(id) {
+  const d = DECOR.find(x => x.id === id);
+  if (!d || (S.decor || []).includes(id)) return;
+  if ((S.gold || 0) < d.cost) {
+    return toast(`<div><b>Pas assez d'or</b><small>Il manque ${d.cost - (S.gold || 0)} pièces : gagne des niveaux avec des coups d'avance.</small></div>`);
+  }
+  S.gold -= d.cost;
+  S.decor = [...(S.decor || []), id];
+  play('unlock');
+  checkTrophies(); persist();
+  toast(`<div><b>${esc(d.name)}</b><small>Installé à Camelot !</small></div>`);
+  camelotScreen();
 }
 
 // ---------- Galerie, trophées, réglages ----------
@@ -522,7 +561,8 @@ function settings() {
 
 // ---------- Actions des boutons ----------
 const ACT = {
-  title, map: () => { closeModal(); mapScreen(); }, gallery, trophies, settings,
+  title, map: () => { closeModal(); mapScreen(); }, gallery, trophies, settings, camelot: () => camelotScreen(),
+  buyDecor: b => buyDecor(b.dataset.id),
   closeModal,
   level: b => prepare(+b.dataset.id),
   locked: () => toast('<div><b>Pas encore !</b><small>Termine d\'abord le niveau précédent.</small></div>'),

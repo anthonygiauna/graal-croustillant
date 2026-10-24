@@ -11,6 +11,8 @@ export function blankSave() {
     trophies: {},          // { [id]: date }
     chapters: [],          // cinématiques déjà vues
     companion: 'arthur',
+    gold: 0,               // pièces d'or gagnées avec les coups d'avance
+    decor: [],             // décorations de Camelot achetées
     settings: { sound: true, music: true, hint: true, vibrate: true },
     stats: { wins: 0, losses: 0, swords: 0, bombs: 0, grails: 0, maxCascade: 0, maxLeft: 0, lastMoveWins: 0,
       col: [0, 0, 0, 0, 0, 0], midnight: 0, powers: [], xCross: 0, xBombSword: 0, xBombBomb: 0, xGrail2: 0,

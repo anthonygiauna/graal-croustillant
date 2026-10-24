@@ -253,3 +253,19 @@ test('pouvoir de la Dame du Lac : retire 3 toiles', () => {
   usePower(g, 'webs3', null, []);
   assert(g.stat.webs >= 3);
 });
+
+test('pouvoirs de Keu, Tristan et Galaad', () => {
+  const g = grid({}, { goals: [{ type: 'collect', color: 2, count: 30 }] });
+  const ev = [];
+  assert(usePower(g, 'goal6', null, ev));
+  const c = firstClear(ev);
+  eq(c.cleared.filter(p => p.c === 2).length >= 6, true, 'Keu range la couleur demandée');
+  const g2 = grid();
+  const ev2 = [];
+  assert(usePower(g2, 'arrows', null, ev2));
+  eq(firstClear(ev2).cleared.length >= 8, true, 'une flèche par colonne');
+  const g3 = grid();
+  assert(usePower(g3, 'bombs2', null, []));
+  eq(g3.cells.filter(p => p && p.sp === 'bomb').length >= 2, true, 'deux Catapultes');
+  assert(noEmpty(g2));
+});

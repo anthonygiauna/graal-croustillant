@@ -1,5 +1,6 @@
 // Contenu du jeu : personnages, trophées, dialogues, phrases drôles. Tout est original.
 
+// Les id ne changent jamais (sauvegardes) : seuls les noms et textes se renomment.
 // look : apparence du portrait (voir art.js). unlock : { type: 'start' | 'level' | 'stars' | 'trophy', value }.
 export const CHARACTERS = [
   { id: 'arthur', name: 'Arthur', title: 'Roi un peu dépassé',
@@ -7,9 +8,9 @@ export const CHARACTERS = [
     hello: "Bonjour, je suis le roi. Enfin, je crois. Quelqu'un a vu ma couronne ?",
     power: 'toRow', powerName: 'Excalibur de poche', powerDesc: "Transforme la pièce de ton choix en Épée tournoyante.",
     unlock: { type: 'start' },
-    look: { skin: '#f2c9a0', hair: '#c98a3a', hairStyle: 'short', beard: 'short', hat: 'crown', cloth: '#2f5fb3', bg: '#f3d36b', mouth: 'smile' } },
-  { id: 'gaspard', name: 'Gaspard', title: 'Écuyer très prudent',
-    bio: "Écuyer d'Arthur, il porte l'armure de son maître, son épée, son bouclier et surtout sa peur. A déjà fui devant un écureuil, « par principe ».",
+    look: { skin: '#f2c9a0', hair: '#c98a3a', hairStyle: 'short', beard: 'short', hat: 'crown', cloth: '#2f5fb3', bg: '#f3d36b', mouth: 'smile', cape: '#b8202e' } },
+  { id: 'gaspard', name: 'Girflet', title: 'Écuyer très, très prudent',
+    bio: "Le plus jeune de la Table ronde, entré comme écuyer d'Arthur. Il porte l'armure du roi, son épée, son bouclier et surtout sa peur. A déjà fui devant un écureuil, « par principe ».",
     hello: "M-m-m-moi ? Débloqué ? Il faut que j'aille quelque part de dangereux ?",
     power: 'stripes2', powerName: 'Fuite stratégique', powerDesc: "En s'enfuyant, il lâche 2 Épées tournoyantes au hasard sur la grille.",
     unlock: { type: 'level', value: 5 },
@@ -19,7 +20,7 @@ export const CHARACTERS = [
     hello: "Ah, te voilà ! Je savais que tu viendrais. Enfin, je l'avais oublié, mais je le savais.",
     power: 'shuffle', powerName: 'Grand chambardement', powerDesc: "Mélange toute la grille d'un coup de baguette.",
     unlock: { type: 'level', value: 10 },
-    look: { skin: '#f0c8a8', hair: '#e8e8ee', hairStyle: 'long', beard: 'long', hat: 'wizard', cloth: '#4b3a8c', bg: '#b9b0e8', mouth: 'smile' } },
+    look: { skin: '#f0c8a8', hair: '#e8e8ee', hairStyle: 'long', beard: 'long', hat: 'wizard', cloth: '#4b3a8c', bg: '#b9b0e8', mouth: 'smile', staff: true, bushy: true } },
   { id: 'guenievre', name: 'Guenièvre', title: 'Reine et vraie patronne',
     bio: "C'est elle qui gère le château, les finances et les chevaliers qui se perdent dans les couloirs. Collectionne les tapisseries et les soupirs.",
     hello: "Enfin quelqu'un de compétent dans ce château. Viens, on a du travail.",
@@ -38,8 +39,8 @@ export const CHARACTERS = [
     power: 'moves3', powerName: 'Marchandage', powerDesc: "Obtient 3 coups supplémentaires.",
     unlock: { type: 'level', value: 20 },
     look: { skin: '#d9a77a', hair: '#2a1a10', hairStyle: 'short', beard: 'goatee', hat: 'helmet', cloth: '#2e7a5a', bg: '#a8dcc4', mouth: 'smile' } },
-  { id: 'gontran', name: 'Gontran', title: "Aubergiste de L'Écuelle Joyeuse",
-    bio: "Tient la seule auberge où l'on sert la cervoise en chope de trois litres. Connaît tous les secrets du royaume, mais les vend à prix d'ami.",
+  { id: 'gontran', name: 'Lucan', title: 'Bouteiller du roi',
+    bio: "Lucan le Bouteiller garde les caves de Camelot et sert la cervoise en chope de trois litres. Il connaît tous les secrets du royaume, mais les vend à prix d'ami.",
     hello: "Une place à ma table pour toi ! La première tournée est offerte, les suivantes aussi, je suis trop gentil.",
     power: 'chopes', powerName: 'Tournée générale', powerDesc: "Fait disparaître toutes les Chopes de la grille.",
     unlock: { type: 'trophy', value: 'combo5' },
@@ -50,14 +51,14 @@ export const CHARACTERS = [
     power: 'webs3', powerName: 'Grand nettoyage', powerDesc: "Retire 3 toiles d'araignée (ou 3 pièces s'il n'y en a plus).",
     unlock: { type: 'level', value: 30 },
     look: { skin: '#cfe6ef', hair: '#3a8fb8', hairStyle: 'long', hat: 'pearls', cloth: '#5ab0c8', bg: '#9fd8ec', mouth: 'smile' } },
-  { id: 'pistache', name: 'Pistache', title: 'Dragon strictement végétarien',
-    bio: "Terreur des potagers, il refuse de manger les chevaliers « à cause du métal ». Crache du feu uniquement pour griller ses courgettes.",
+  { id: 'pistache', name: 'Le Dragon Rouge', title: 'Dragon de la prophétie, végétarien',
+    bio: "Merlin l'a découvert endormi sous la tour de Vortigern, en pleine bagarre avec le Dragon Blanc. Depuis, il a fait la paix, arrêté la viande, et crache du feu uniquement pour griller ses courgettes.",
     hello: "Rassure-toi, je ne mange personne. Sauf si tu es une aubergine.",
     power: 'bomb3', powerName: 'Éternuement de feu', powerDesc: "Fait exploser une zone 3x3 à l'endroit de ton choix.",
     unlock: { type: 'trophy', value: 'first-grail' },
-    look: { dragon: true, bg: '#c8e8a0' } },
-  { id: 'fredonin', name: 'Fredonin', title: 'Barde qui chante faux',
-    bio: "Auteur de 412 ballades, toutes interdites dans au moins un royaume. Sa voix fait fuir les loups, ce qui est pratique en forêt.",
+    look: { dragon: true, bg: '#f6c8a8' } },
+  { id: 'fredonin', name: 'Dagonet', title: 'Fou du roi qui chante faux',
+    bio: "Bouffon officiel de la cour d'Arthur et auteur de 412 ballades, toutes interdites dans au moins un royaume. Sa voix fait fuir les loups, ce qui est pratique en forêt.",
     hello: "♪ Ô toi qui m'as débloqué-éé-ééé ♪ ... Ça sonne bien, non ? Non ?",
     power: 'cross', powerName: 'Fausse note', powerDesc: "Sa fausse note fait éclater une ligne et une colonne au hasard.",
     unlock: { type: 'stars', value: 60 },
@@ -86,6 +87,24 @@ export const CHARACTERS = [
     power: 'toGrail', powerName: 'Sortilège doré', powerDesc: "Transforme la pièce de ton choix en Graal Sacré.",
     unlock: { type: 'level', value: 50 },
     look: { skin: '#e8d0e8', hair: '#2a1030', hairStyle: 'long', hat: 'witch', cloth: '#5a1a6a', bg: '#c8a0e0', mouth: 'smirk' } },
+  { id: 'keu', name: 'Keu', title: 'Sénéchal grognon',
+    bio: "Frère de lait d'Arthur et sénéchal de Camelot. Il tient les comptes, les clés et les rancunes. Râle à chaque repas, mais aucune cuillère ne manque jamais.",
+    hello: "Encore un nouveau ? Bon. Je t'inscris dans le registre. Ne touche à rien.",
+    power: 'goal6', powerName: 'Inventaire', powerDesc: "Range 6 pièces de la couleur que tu dois collecter (ou de la plus fréquente).",
+    unlock: { type: 'stars', value: 130 },
+    look: { skin: '#e8b890', hair: '#5a3a1a', hairStyle: 'short', beard: 'short', hat: 'none', cloth: '#7a2e2e', bg: '#e8c8a0', mouth: 'flat' } },
+  { id: 'tristan', name: 'Tristan', title: 'Archer et harpiste',
+    bio: "Meilleur archer de la Table ronde et joueur de harpe à ses heures. Écrit des poèmes pour Iseut, qu'il lit surtout aux chevaux.",
+    hello: "Pour toi, j'ai composé un poème. Il fait onze pages. Je te le lis plus tard.",
+    power: 'arrows', powerName: 'Pluie de flèches', powerDesc: "Une flèche par colonne : 8 pièces touchées au hasard.",
+    unlock: { type: 'level', value: 45 },
+    look: { skin: '#f0c8a0', hair: '#c87a3a', hairStyle: 'flowing', hat: 'none', cloth: '#2e6a8a', bg: '#bfe0f0', mouth: 'smile' } },
+  { id: 'galaad', name: 'Galaad', title: 'Chevalier parfait (épuisant)',
+    bio: "Fils de Lancelot, si pur qu'il brille légèrement dans le noir. Il ne ment jamais, ne triche jamais, et le rappelle souvent.",
+    hello: "Je suis honoré. Sincèrement. Je suis toujours sincère, d'ailleurs.",
+    power: 'bombs2', powerName: 'Lumière sacrée', powerDesc: "Change 2 pièces au hasard en Catapultes.",
+    unlock: { type: 'level', value: 55 },
+    look: { skin: '#f6d8c0', hair: '#f5e6a0', hairStyle: 'short', hat: 'none', cloth: '#f4f4f8', cape: '#e8263a', bg: '#fff2c0', mouth: 'smile' } },
 ];
 
 export const unlockText = u => ({
@@ -130,6 +149,7 @@ export const TROPHIES = [
   { id: 'stars150', title: 'Voie lactée de Camelot', desc: 'Réunir 150 étoiles.', check: s => starsTotal(s) >= 150 },
   { id: 'friends7', title: 'Bande de joyeux lurons', desc: 'Débloquer 7 personnages.', check: s => s.unlocked.length >= 7 },
   { id: 'friends-all', title: 'Tout Camelot dans la poche', desc: 'Débloquer tous les personnages.', check: s => s.unlocked.length >= CHARACTERS.length },
+  { id: 'camelot', title: 'Camelot comme neuf', desc: "Restaurer tout Camelot avec l'or des coups d'avance.", check: s => (s.decor || []).length >= 8 },
   { id: 'the-end', title: 'Le Graal est croustillant', desc: 'Terminer le jeu.', check: s => !!s.levels[60] },
 ];
 
@@ -167,8 +187,8 @@ export const DIALOGUES = {
     ['bohort', "D'après le règlement, une quête ne peut pas passer par un marais sans autorisation écrite."],
     ['arthur', "Je suis le roi. Je t'autorise."],
     ['bohort', "Il faut le tampon."],
-    ['gontran', "Holà, voyageurs ! J'ai ouvert une auberge flottante. Chopes, fromages, et une vue imprenable sur la brume."],
-    ['gaspard', "Enfin un endroit sûr ! … Pourquoi elle coule ?"],
+    ['gontran', "Holà, voyageurs ! Lucan le Bouteiller, pour vous servir. J'ai sauvé la réserve de cervoise du château : elle flotte, c'est pratique."],
+    ['gaspard', "Enfin un endroit sûr ! … Pourquoi ça coule ?"],
   ],
   5: [
     ['narrateur', "Les Terres de Morgane. Le ciel est violet, l'herbe aussi, et l'ambiance est plutôt tendue."],
@@ -228,7 +248,7 @@ export const MERLIN_QUIPS = [
 export const SHUFFLE_QUIPS = [
   "Plus aucun coup ! Merlin secoue la grille comme un vieux tapis.",
   "Les pièces se sont disputées. On les mélange pour calmer tout le monde.",
-  "Coincé ? Gaspard a renversé la grille en s'enfuyant. On repart !",
+  "Coincé ? Girflet a renversé la grille en s'enfuyant. On repart !",
   "Grand ménage de printemps : on mélange tout.",
   "Perceval a éternué sur la grille. Tout a bougé.",
 ];
@@ -238,7 +258,7 @@ export const WIN_QUIPS = [
   "Bravo ! Arthur applaudit, puis demande ce qui s'est passé.",
   "Magnifique ! Même Bohort a souri. Brièvement. Hors règlement.",
   "Gagné ! Perceval pense que c'est grâce à lui. Laisse-le croire.",
-  "Splendide ! Gontran offre une tournée en ton honneur.",
+  "Splendide ! Lucan offre une tournée en ton honneur.",
   "Tu es la meilleure chevalière du royaume. Ne le dis pas à Lancelot.",
   "Prouesse ! Les grenouilles des marais en parlent encore.",
 ];
@@ -246,10 +266,25 @@ export const WIN_QUIPS = [
 export const LOSE_QUIPS = [
   "Raté ! Mais avec panache. Surtout le panache.",
   "Pas grave ! Arthur a mis douze ans à trouver ses clés.",
-  "Défaite honorable. Gaspard, lui, s'est caché sous la table.",
+  "Défaite honorable. Girflet, lui, s'est caché sous la table.",
   "La grille a gagné cette manche. La revanche est déjà prête.",
   "Presque ! Merlin dit qu'il avait prévu ça. Il dit ça tout le temps.",
   "Même Lancelot rate parfois. Enfin, il dit que non.",
 ];
 
 export const COMBO_WORDS = ['', '', 'Joli !', 'Superbe !', 'Prodigieux !', 'Légendaire !', 'Croustillant !!'];
+
+// Décorations de Camelot, achetées avec l'or des coups d'avance (1 pièce par coup restant à la victoire,
+// le double à partir de 10 coups). Elles apparaissent dans la cour (courtyard.js).
+export const DECOR = [
+  { id: 'bannieres', name: 'Bannières royales', desc: 'Aux couleurs de Camelot, accrochées aux remparts.', cost: 5 },
+  { id: 'fleurs', name: 'Parterres de fleurs', desc: 'Guenièvre trouvait la cour un peu triste.', cost: 10 },
+  { id: 'fontaine', name: 'Fontaine de la Dame du Lac', desc: "Elle a insisté pour l'installer. L'eau est un peu magique.", cost: 20 },
+  { id: 'vitraux', name: 'Vitraux colorés', desc: 'Toutes les fenêtres du château passent en couleurs.', cost: 30 },
+  { id: 'statue', name: "Statue d'Uther Pendragon", desc: "Le père d'Arthur, en pierre, l'air sévère comme de son vivant.", cost: 45 },
+  { id: 'table', name: 'La Table ronde', desc: 'Sortie dans la cour pour les grandes occasions.', cost: 60 },
+  { id: 'toits', name: "Toits d'or", desc: "Les tours brillent jusqu'à Brocéliande.", cost: 80 },
+  { id: 'feux', name: 'Feux de Merlin', desc: "Un feu d'artifice permanent. Merlin n'a jamais trouvé comment l'arrêter.", cost: 100 },
+];
+
+export const goldFor = movesLeft => (movesLeft >= 10 ? movesLeft * 2 : movesLeft);

@@ -198,6 +198,7 @@ export function portrait(ch) {
   }[L.hairStyle] || '';
   s += `<g clip-path="url(#pc)">` + hairBack;
   s += `<path d="M12 100 Q14 74 50 70 Q86 74 88 100 Z" fill="${L.cloth}" ${a(st)}/>`;
+  if (L.cape) s += `<path d="M12 100 Q12 78 30 73 L50 96 L70 73 Q88 78 88 100 Z" fill="${L.cape}" ${a(st)}/><path d="M26 74 Q50 88 74 74 L70 82 Q50 94 30 82 Z" fill="#fffaf0" ${a({ ...st, "stroke-width": 2.5 })}/>` + [34, 42, 50, 58, 66].map((x, k) => `<path d="M${x} ${80 + (k % 2) * 3} l0 4" stroke="#1a1010" stroke-width="2.4"/>`).join("");
   if (L.apron) s += `<path d="M36 76 L64 76 L66 100 L34 100 Z" fill="#fffaf0" ${a(st)}/>`;
   s += `<rect x="43" y="60" width="14" height="14" fill="${L.skin}" ${a(st)}/>`;
   s += `</g>`;
@@ -216,6 +217,7 @@ export function portrait(ch) {
   s += hairFront;
   // visage
   const eyesY = 49;
+  if (L.bushy) s += `<path d="M36 43 Q41 37 47 41 M53 41 Q59 37 64 43" fill="none" stroke="${L.hair}" stroke-width="5" stroke-linecap="round"/>`;
   s += `<path d="M38 42 Q42 39 46 42 M54 42 Q58 39 62 42" fill="none" ${a({ ...st, 'stroke-width': 2.5 })}/>`;
   s += `<ellipse cx="42" cy="${eyesY}" rx="2.8" ry="3.4" fill="${INK}"/><ellipse cx="58" cy="${eyesY}" rx="2.8" ry="3.4" fill="${INK}"/>`;
   s += `<circle cx="43" cy="${eyesY - 1.2}" r="1" fill="#fff"/><circle cx="59" cy="${eyesY - 1.2}" r="1" fill="#fff"/>`;
@@ -239,15 +241,16 @@ export function portrait(ch) {
   s += (L.beard === 'mustache' ? mouth + beard : beard + mouth);
   if (L.mouth === 'sing') s += `<text x="74" y="30" font-size="16" fill="${INK}">♪</text><text x="80" y="44" font-size="12" fill="${INK}">♫</text>`;
   const hat = {
-    crown: `<path d="M32 28 L30 12 L40 20 L50 8 L60 20 L70 12 L68 28 Z" fill="#f5c53a" ${a(st)}/><circle cx="50" cy="22" r="3" fill="#e8263a"/>`,
+    crown: `<path d="M34 26 Q50 14 66 26 Z" fill="#b8202e" ${a(st)}/><path d="M31 30 L28 11 L39 20 L50 5 L61 20 L72 11 L69 30 Z" fill="#f5c53a" ${a(st)}/><rect x="30" y="25" width="40" height="7" rx="2" fill="#e0a21c" ${a({ ...st, "stroke-width": 2.5 })}/><circle cx="28" cy="11" r="2.6" fill="#fff4d6" ${a({ ...st, "stroke-width": 1.5 })}/><circle cx="50" cy="5" r="3" fill="#fff4d6" ${a({ ...st, "stroke-width": 1.5 })}/><circle cx="72" cy="11" r="2.6" fill="#fff4d6" ${a({ ...st, "stroke-width": 1.5 })}/><circle cx="50" cy="28.5" r="3" fill="#e8263a" ${a({ ...st, "stroke-width": 1.5 })}/><circle cx="39" cy="28.5" r="2" fill="#2fb0e8"/><circle cx="61" cy="28.5" r="2" fill="#2fd07a"/>`,
     tiara: `<path d="M36 28 Q50 16 64 28 L60 26 L50 18 L40 26 Z" fill="#f5c53a" ${a({ ...st, 'stroke-width': 2.5 })}/><circle cx="50" cy="20" r="3" fill="#4ad0ff" ${a({ ...st, 'stroke-width': 1.5 })}/>`,
     helmet: `<path d="M27 44 Q26 16 50 16 Q74 16 73 44 L66 44 Q64 30 50 30 Q36 30 34 44 Z" fill="#b8c0cc" ${a(st)}/><path d="M50 16 L50 30" ${a({ ...st, 'stroke-width': 2.5 })}/><path d="M46 30 L54 30 L52 50 L48 50 Z" fill="#b8c0cc" ${a({ ...st, 'stroke-width': 2.5 })}/>`,
-    wizard: `<path d="M24 32 Q50 24 76 32 Q50 38 24 32 Z" fill="#3a2a7a" ${a(st)}/><path d="M32 31 L54 -2 L68 31 Z" fill="#4b3a8c" ${a(st)}/><text x="44" y="22" font-size="10" fill="#f5c53a">★</text>`,
+    wizard: `<path d="M18 33 Q50 22 82 33 Q50 41 18 33 Z" fill="#2e2266" ${a(st)}/><path d="M31 32 Q44 14 50 -4 Q60 6 70 4 Q62 12 69 32 Z" fill="#4b3a8c" ${a(st)}/><path d="M33 29 Q50 24 67 29" fill="none" stroke="#f5c53a" stroke-width="3.5"/><text x="41" y="21" font-size="9" fill="#f5c53a">★</text><text x="55" y="14" font-size="7" fill="#fff4b0">★</text><path d="M58 24 A4 4 0 1 1 62 19 A3 3 0 1 0 58 24 Z" fill="#fff4b0"/>`,
     jester: `<path d="M28 34 Q30 18 50 22 Q70 18 72 34 Z" fill="#f5c53a" ${a(st)}/><path d="M30 30 Q16 14 12 30 M70 30 Q84 14 88 30" fill="none" ${a({ ...st, 'stroke-width': 7, stroke: '#d14a8a' })}/><circle cx="12" cy="31" r="4" fill="#f5c53a" ${a({ ...st, 'stroke-width': 2 })}/><circle cx="88" cy="31" r="4" fill="#f5c53a" ${a({ ...st, 'stroke-width': 2 })}/>`,
     witch: `<path d="M20 32 Q50 24 80 32 Q50 40 20 32 Z" fill="#1a0a20" ${a(st)}/><path d="M32 30 L58 0 L66 30 Z" fill="#2a1030" ${a(st)}/><path d="M36 26 L64 26" stroke="#9b59d0" stroke-width="4"/>`,
     pearls: `<path d="M32 30 Q50 22 68 30" fill="none" stroke="#fff" stroke-width="4" stroke-dasharray="1 5" stroke-linecap="round"/>`,
   }[L.hat] || '';
   s += hat;
+  if (L.staff) s += `<path d="M84 98 L80 30" stroke="#7a4a2a" stroke-width="5" stroke-linecap="round"/><path d="M84 98 L80 30" fill="none" ${a({ ...st, "stroke-width": 1.5 })}/><circle cx="80" cy="26" r="9" fill="#7ad8ff" opacity=".35"/><circle cx="80" cy="26" r="5.5" fill="#c8f0ff" ${a({ ...st, "stroke-width": 2 })}/>`;
   return svg(s);
 }
 const a = o => Object.entries(o).map(([k, v]) => `${k}="${v}"`).join(' ');
@@ -255,10 +258,10 @@ const svg = inner => `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/s
 
 function dragon() {
   return `<path d="M30 30 L24 10 L38 24 Z M70 30 L76 10 L62 24 Z" fill="#f5c53a" ${a(st)}/>
-  <path d="M14 100 Q16 76 50 72 Q84 76 86 100 Z" fill="#5aa83a" ${a(st)}/>
+  <path d="M14 100 Q16 76 50 72 Q84 76 86 100 Z" fill="#b8402e" ${a(st)}/>
   <path d="M40 76 L50 86 L60 76" fill="none" stroke="#f5e08a" stroke-width="6"/>
-  <ellipse cx="50" cy="46" rx="26" ry="22" fill="#7ac84a" ${a(st)}/>
-  <ellipse cx="50" cy="60" rx="20" ry="13" fill="#a8e07a" ${a(st)}/>
+  <ellipse cx="50" cy="46" rx="26" ry="22" fill="#e0583a" ${a(st)}/>
+  <ellipse cx="50" cy="60" rx="20" ry="13" fill="#f39a74" ${a(st)}/>
   <ellipse cx="43" cy="58" rx="2.5" ry="2" fill="${INK}"/><ellipse cx="57" cy="58" rx="2.5" ry="2" fill="${INK}"/>
   <circle cx="38" cy="40" r="8" fill="#fff" ${a(st)}/><circle cx="62" cy="40" r="8" fill="#fff" ${a(st)}/>
   <circle cx="40" cy="41" r="3.5" fill="${INK}"/><circle cx="60" cy="41" r="3.5" fill="${INK}"/>
@@ -268,7 +271,7 @@ function dragon() {
 }
 
 // Merlin en petit, pour les bulles d'aide.
-export const merlinFace = () => portrait({ look: { skin: '#f0c8a8', hair: '#e8e8ee', hairStyle: 'long', beard: 'long', hat: 'wizard', cloth: '#4b3a8c', bg: '#b9b0e8', mouth: 'smile' } });
+export const merlinFace = () => portrait({ look: { skin: '#f0c8a8', hair: '#e8e8ee', hairStyle: 'long', beard: 'long', hat: 'wizard', cloth: '#4b3a8c', bg: '#b9b0e8', mouth: 'smile', staff: true, bushy: true } });
 
 export function narratorIcon() {
   return svg(`<circle cx="50" cy="50" r="47" fill="#f3e2b8" ${a(st)}/>
