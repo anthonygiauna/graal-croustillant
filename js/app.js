@@ -609,6 +609,25 @@ document.addEventListener('click', e => {
 document.addEventListener('pointerdown', () => unlockAudio(), { once: true });
 document.addEventListener('visibilitychange', applySettings);
 
+// Lien de sauvegarde (…/?code=GRAAL1:…) : propose de charger la partie, puis retire le code de l'adresse.
+function offerLinkedSave() {
+  const raw = new URLSearchParams(location.search).get('code');
+  if (!raw) return;
+  try { history.replaceState(null, '', location.pathname); } catch (e) { /* rien */ }
+  const s = Save.importCode(raw.replace(/ /g, '+'));
+  if (!s) return toast('<div><b>Lien de sauvegarde incomplet</b><small>Recopie le lien en entier.</small></div>');
+  const n = Object.keys(s.levels).length;
+  modal(`<h2>Charger une partie ?</h2>
+    <p>${s.name ? `Partie de <b>${esc(s.name)}</b> : ` : ''}${n} niveau${n > 1 ? 'x' : ''} réussi${n > 1 ? 's' : ''}, ${starsTotal(s)} étoiles, ${s.unlocked.length} personnages.</p>
+    <p class="subtitle">Elle remplace la progression enregistrée sur cet appareil.</p>
+    <div class="row"><button class="btn" data-act="closeModal">Non merci</button><button class="btn big gold" data-act="linkedSaveYes">Charger</button></div>`, 'small');
+  ACT.linkedSaveYes = () => {
+    S = s; persist(); applySettings(); closeModal();
+    toast(`<div><b>Partie chargée</b><small>Bon retour, ${esc(s.name || 'chevalière')} !</small></div>`);
+    title();
+  };
+}
+
 // ---------- Démarrage ----------
 (async () => {
   try {
@@ -620,6 +639,7 @@ document.addEventListener('visibilitychange', applySettings);
   checkUnlocks();
   applySettings();
   title();
+  offerLinkedSave();
   const local = location.hostname === 'localhost' && !location.search.includes('sw=1'); // en local, pas de cache pour voir les modifications
   if ('serviceWorker' in navigator && location.protocol !== 'file:' && !local) navigator.serviceWorker.register('sw.js').catch(() => {});
   window.__game = { get G() { return G; }, get S() { return S; }, DATA, E };

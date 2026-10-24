@@ -1,6 +1,6 @@
 // Service worker : le jeu fonctionne hors ligne une fois ouvert une première fois.
 // Changer VERSION à chaque mise en ligne pour que les téléphones récupèrent la nouvelle version.
-const VERSION = 'graal-v1';
+const VERSION = 'graal-v2';
 const FILES = [
   './', 'index.html', 'style.css', 'manifest.webmanifest', 'data/levels.json',
   'js/app.js', 'js/engine.js', 'js/levels.js', 'js/data.js', 'js/art.js', 'js/audio.js', 'js/board.js', 'js/save.js',

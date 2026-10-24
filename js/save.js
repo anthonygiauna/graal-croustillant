@@ -46,7 +46,7 @@ export function exportCode(s) {
 }
 
 export function importCode(code) {
-  const m = String(code).trim().match(/^GRAAL1:([A-Za-z0-9+/=\s]+)$/);
+  const m = String(code).match(/GRAAL1:\s*([A-Za-z0-9+/=\s]+)/); // tolère du texte autour (copier-coller depuis un message)
   if (!m) return null;
   try {
     const bin = atob(m[1].replace(/\s/g, ''));
