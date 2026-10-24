@@ -223,6 +223,7 @@ function stopGame() {
   G.view.destroy();
   window.removeEventListener('resize', G.onResize);
   G = null;
+  if (pendingReload) location.reload(); // nouvelle version arrivée pendant la partie
 }
 
 function startGame(id) {
@@ -668,6 +669,22 @@ function offerLinkedSave() {
   };
 }
 
+// Mise à jour automatique : quand une nouvelle version est publiée, l'appli se recharge d'elle-même,
+// tout de suite si on n'est pas en partie, sinon dès qu'on quitte le niveau.
+let pendingReload = false;
+function watchUpdates() {
+  let firstInstall = !navigator.serviceWorker.controller; // la toute première installation ne demande pas de rechargement
+  navigator.serviceWorker.register('sw.js').then(reg => {
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) reg.update().catch(() => {}); });
+  }).catch(() => {});
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (firstInstall) { firstInstall = false; return; }
+    if (pendingReload) return;
+    pendingReload = true;
+    if (!G) location.reload();
+  });
+}
+
 // ---------- Démarrage ----------
 (async () => {
   try {
@@ -681,6 +698,6 @@ function offerLinkedSave() {
   title();
   offerLinkedSave();
   const local = location.hostname === 'localhost' && !location.search.includes('sw=1'); // en local, pas de cache pour voir les modifications
-  if ('serviceWorker' in navigator && location.protocol !== 'file:' && !local) navigator.serviceWorker.register('sw.js').catch(() => {});
+  if ('serviceWorker' in navigator && location.protocol !== 'file:' && !local) watchUpdates();
   window.__game = { get G() { return G; }, get S() { return S; }, DATA, E };
 })();
