@@ -106,7 +106,7 @@ function title() {
     </div>
     <nav class="menu">
       <button class="btn big gold" data-act="map">${S.levels[1] ? 'Continuer' : 'Jouer'}</button>
-      <button class="btn" data-act="camelot">Restaurer Camelot <small>${S.gold || 0} pièces d'or</small></button>
+      <button class="btn" data-act="camelot">Restaurer Kaamelott <small>${S.gold || 0} pièces d'or</small></button>
       <button class="btn" data-act="gallery">Personnages <small>${S.unlocked.length} / ${CHARACTERS.length}</small></button>
       <button class="btn" data-act="trophies">Salle des trophées <small>${Object.keys(S.trophies).length} / ${TROPHIES.length}</small></button>
       <button class="btn" data-act="settings">Réglages</button>
@@ -439,7 +439,7 @@ async function win() {
   modal(`<p class="kicker">Niveau ${id} réussi${S.name ? `, ${esc(S.name)}` : ""} !</p>
     <div class="big-stars">${[1, 2, 3].map(k => `<span class="${k <= stars ? 'on' : ''}" style="--d:${k * 0.35}s">★</span>`).join('')}</div>
     <p class="final-score">${g.score.toLocaleString('fr-FR')} points${record ? ' <em>Record !</em>' : ''}</p>
-    <p class="gold-reward">${gold ? `<span class="coin"></span> +${gold} pièce${gold > 1 ? 's' : ''} d'or pour ${left} coup${left > 1 ? 's' : ''} d'avance${left >= 10 ? ' (coffre royal : double !)' : ''}` : 'Gagne avec des coups d\x27avance pour gagner de l\x27or et restaurer Camelot.'}</p>
+    <p class="gold-reward">${gold ? `<span class="coin"></span> +${gold} pièce${gold > 1 ? 's' : ''} d'or pour ${left} coup${left > 1 ? 's' : ''} d'avance${left >= 10 ? ' (coffre royal : double !)' : ''}` : 'Gagne avec des coups d\x27avance pour gagner de l\x27or et restaurer Kaamelott.'}</p>
     <div class="bubble">${esc(pick(WIN_QUIPS))}</div>
     <div class="row">
       <button class="btn" data-act="map">Carte</button>
@@ -472,12 +472,12 @@ function giveUp() {
     <div class="row"><button class="btn" data-act="map">Carte</button><button class="btn big gold" data-act="go" data-id="${G.id}">Réessayer</button></div>`, 'result lose');
 }
 
-// ---------- Restaurer Camelot (récompenses des coups d'avance) ----------
+// ---------- Restaurer Kaamelott (récompenses des coups d'avance) ----------
 function camelotScreen() {
   stopGame();
   const owned = S.decor || [];
   main.innerHTML = `<div class="screen list-screen">
-    <header class="bar"><button class="btn icon" data-act="title" aria-label="Retour">‹</button><h2>Restaurer Camelot</h2><span class="pill"><span class="coin"></span> ${S.gold || 0}</span></header>
+    <header class="bar"><button class="btn icon" data-act="title" aria-label="Retour">‹</button><h2>Restaurer Kaamelott</h2><span class="pill"><span class="coin"></span> ${S.gold || 0}</span></header>
     <div class="scroll">
       <div class="camelot-view">${camelotSvg()}</div>
       <p class="camelot-help">Chaque coup d'avance à la fin d'un niveau rapporte une pièce d'or (le double à partir de 10 coups). Les compagnons débloqués s'installent dans la cour.</p>
@@ -499,7 +499,7 @@ function buyDecor(id) {
   S.decor = [...(S.decor || []), id];
   play('unlock');
   checkTrophies(); persist();
-  toast(`<div><b>${esc(d.name)}</b><small>Installé à Camelot !</small></div>`);
+  toast(`<div><b>${esc(d.name)}</b><small>Installé à Kaamelott !</small></div>`);
   camelotScreen();
 }
 

@@ -4,7 +4,7 @@
 // look : apparence du portrait (voir art.js). unlock : { type: 'start' | 'level' | 'stars' | 'trophy', value }.
 export const CHARACTERS = [
   { id: 'arthur', name: 'Arthur', title: 'Roi un peu dépassé',
-    bio: "Roi de Camelot depuis qu'il a retiré une épée d'un rocher. Il essaie depuis de la remettre dedans, sans succès. Signe tous les décrets au crayon, au cas où.",
+    bio: "Roi de Kaamelott depuis qu'il a retiré une épée d'un rocher. Il essaie depuis de la remettre dedans, sans succès. Signe tous les décrets au crayon, au cas où.",
     hello: "Bonjour, je suis le roi. Enfin, je crois. Quelqu'un a vu ma couronne ?",
     power: 'toRow', powerName: 'Excalibur de poche', powerDesc: "Transforme la pièce de ton choix en Épée tournoyante.",
     unlock: { type: 'start' },
@@ -40,7 +40,7 @@ export const CHARACTERS = [
     unlock: { type: 'level', value: 20 },
     look: { skin: '#d9a77a', hair: '#2a1a10', hairStyle: 'short', beard: 'goatee', hat: 'helmet', cloth: '#2e7a5a', bg: '#a8dcc4', mouth: 'smile' } },
   { id: 'gontran', name: 'Lucan', title: 'Bouteiller du roi',
-    bio: "Lucan le Bouteiller garde les caves de Camelot et sert la cervoise en chope de trois litres. Il connaît tous les secrets du royaume, mais les vend à prix d'ami.",
+    bio: "Lucan le Bouteiller garde les caves de Kaamelott et sert la cervoise en chope de trois litres. Il connaît tous les secrets du royaume, mais les vend à prix d'ami.",
     hello: "Une place à ma table pour toi ! La première tournée est offerte, les suivantes aussi, je suis trop gentil.",
     power: 'chopes', powerName: 'Tournée générale', powerDesc: "Fait disparaître toutes les Chopes de la grille.",
     unlock: { type: 'trophy', value: 'combo5' },
@@ -88,7 +88,7 @@ export const CHARACTERS = [
     unlock: { type: 'level', value: 50 },
     look: { skin: '#e8d0e8', hair: '#2a1030', hairStyle: 'long', hat: 'witch', cloth: '#5a1a6a', bg: '#c8a0e0', mouth: 'smirk' } },
   { id: 'keu', name: 'Keu', title: 'Sénéchal grognon',
-    bio: "Frère de lait d'Arthur et sénéchal de Camelot. Il tient les comptes, les clés et les rancunes. Râle à chaque repas, mais aucune cuillère ne manque jamais.",
+    bio: "Frère de lait d'Arthur et sénéchal de Kaamelott. Il tient les comptes, les clés et les rancunes. Râle à chaque repas, mais aucune cuillère ne manque jamais.",
     hello: "Encore un nouveau ? Bon. Je t'inscris dans le registre. Ne touche à rien.",
     power: 'goal6', powerName: 'Inventaire', powerDesc: "Range 6 pièces de la couleur que tu dois collecter (ou de la plus fréquente).",
     unlock: { type: 'stars', value: 130 },
@@ -146,10 +146,10 @@ export const TROPHIES = [
   { id: 'chapter1', title: 'Sortie de la cour', desc: 'Terminer le chapitre 1.', check: s => !!s.levels[10] },
   { id: 'chapter3', title: 'Même pas mouillée', desc: 'Terminer le chapitre 3.', check: s => !!s.levels[30] },
   { id: 'stars60', title: 'Constellation', desc: 'Réunir 60 étoiles.', check: s => starsTotal(s) >= 60 },
-  { id: 'stars150', title: 'Voie lactée de Camelot', desc: 'Réunir 150 étoiles.', check: s => starsTotal(s) >= 150 },
+  { id: 'stars150', title: 'Voie lactée de Kaamelott', desc: 'Réunir 150 étoiles.', check: s => starsTotal(s) >= 150 },
   { id: 'friends7', title: 'Bande de joyeux lurons', desc: 'Débloquer 7 personnages.', check: s => s.unlocked.length >= 7 },
-  { id: 'friends-all', title: 'Tout Camelot dans la poche', desc: 'Débloquer tous les personnages.', check: s => s.unlocked.length >= CHARACTERS.length },
-  { id: 'camelot', title: 'Camelot comme neuf', desc: "Restaurer tout Camelot avec l'or des coups d'avance.", check: s => (s.decor || []).length >= 8 },
+  { id: 'friends-all', title: 'Tout Kaamelott dans la poche', desc: 'Débloquer tous les personnages.', check: s => s.unlocked.length >= CHARACTERS.length },
+  { id: 'camelot', title: 'Kaamelott comme neuf', desc: "Restaurer tout Kaamelott avec l'or des coups d'avance.", check: s => (s.decor || []).length >= 8 },
   { id: 'the-end', title: 'Le Graal est croustillant', desc: 'Terminer le jeu.', check: s => !!s.levels[60] },
 ];
 
@@ -158,7 +158,7 @@ export { starsTotal };
 // Cinématiques de début de chapitre (et de fin du jeu). who = id de personnage, ou 'narrateur'.
 export const DIALOGUES = {
   1: [
-    ['narrateur', "Camelot, un mardi. La Table ronde tient sa réunion hebdomadaire. Ordre du jour : « Trouver le Graal » et « Qui a mangé le fromage de Bohort ? »"],
+    ['narrateur', "Kaamelott, un mardi. La Table ronde tient sa réunion hebdomadaire. Ordre du jour : « Trouver le Graal » et « Qui a mangé le fromage de Bohort ? »"],
     ['arthur', "Mes amis ! Cette année, nous partons enfin à la quête du Graal !"],
     ['perceval', "Super ! C'est quoi, le Graal ?"],
     ['arthur', "Une coupe sacrée. Dorée. Mystique. Et, d'après Merlin, croustillante."],
@@ -274,10 +274,10 @@ export const LOSE_QUIPS = [
 
 export const COMBO_WORDS = ['', '', 'Joli !', 'Superbe !', 'Prodigieux !', 'Légendaire !', 'Croustillant !!'];
 
-// Décorations de Camelot, achetées avec l'or des coups d'avance (1 pièce par coup restant à la victoire,
+// Décorations de Kaamelott, achetées avec l'or des coups d'avance (1 pièce par coup restant à la victoire,
 // le double à partir de 10 coups). Elles apparaissent dans la cour (courtyard.js).
 export const DECOR = [
-  { id: 'bannieres', name: 'Bannières royales', desc: 'Aux couleurs de Camelot, accrochées aux remparts.', cost: 5 },
+  { id: 'bannieres', name: 'Bannières royales', desc: 'Aux couleurs de Kaamelott, accrochées aux remparts.', cost: 5 },
   { id: 'fleurs', name: 'Parterres de fleurs', desc: 'Guenièvre trouvait la cour un peu triste.', cost: 10 },
   { id: 'fontaine', name: 'Fontaine de la Dame du Lac', desc: "Elle a insisté pour l'installer. L'eau est un peu magique.", cost: 20 },
   { id: 'vitraux', name: 'Vitraux colorés', desc: 'Toutes les fenêtres du château passent en couleurs.', cost: 30 },
