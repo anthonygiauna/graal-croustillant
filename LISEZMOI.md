@@ -1,6 +1,6 @@
 # Le Graal Croustillant
 
-Jeu de match-3 arthurien et humoristique : 60 niveaux en 6 chapitres, 14 compagnons à débloquer, 32 trophées.
+Jeu de match-3 arthurien et humoristique : 90 niveaux en 9 chapitres, 17 compagnons à débloquer, 36 trophées, Kaamelott à restaurer.
 Tout est original et fabriqué en code (graphismes, sons, musique). Aucune installation nécessaire.
 
 ## Jouer en local (sans Node)

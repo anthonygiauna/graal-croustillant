@@ -326,6 +326,31 @@ export function scene(theme) {
       <path d="M140 120 L200 90 L260 120 L230 135 L200 120 L170 135Z" fill="#fff"/>
       <circle cx="200" cy="72" r="20" fill="#fff2a0" opacity=".9"/>
       <path d="M188 58 h24 q0 18 -9 20 v6 q8 1 8 6 h-22 q0 -5 8 -6 v-6 q-9 -2 -9 -20Z" fill="#f5c53a" stroke="${INK}" stroke-width="3"/>`,
+    // Île d'Avalon : brume mauve, île aux pommiers, barque
+    avalon: `<rect width="400" height="300" fill="#e6dcf4"/><circle cx="310" cy="70" r="30" fill="#fff8e0"/>
+      <rect y="170" width="400" height="130" fill="#8ab8d8"/>
+      <path d="M60 190 Q200 110 340 190 Z" fill="#9ccc65" stroke="${INK}" stroke-width="4"/>
+      ${[[120, 160], [170, 140], [230, 140], [280, 162]].map(([x, y]) => `<rect x="${x - 4}" y="${y}" width="8" height="26" fill="#7a4a2a" stroke="${INK}" stroke-width="3"/>
+      <circle cx="${x}" cy="${y - 8}" r="20" fill="#5aa83a" stroke="${INK}" stroke-width="3"/><circle cx="${x - 7}" cy="${y - 10}" r="4" fill="#e8263a"/><circle cx="${x + 8}" cy="${y - 3}" r="4" fill="#e8263a"/>`).join('')}
+      <path d="M150 240 q50 22 100 0 l-10 14 h-80 Z" fill="#a8693a" stroke="${INK}" stroke-width="3"/>
+      <path d="M0 175 h400 M0 215 q100 -10 200 0 t200 0" stroke="#fff" stroke-width="10" opacity=".45" fill="none"/>`,
+    // Forteresse de Mordred : ciel rouge sombre, donjon noir
+    mordred: `<rect width="400" height="300" fill="#7a2a2a"/><circle cx="80" cy="70" r="26" fill="#ffb08a"/>
+      <path d="M0 240 L80 190 L160 220 L240 180 L320 215 L400 190 L400 300 L0 300Z" fill="#3a1a1a" stroke="${INK}" stroke-width="4"/>
+      <g fill="#2a1a20" stroke="${INK}" stroke-width="4"><rect x="150" y="90" width="100" height="120"/><rect x="120" y="120" width="36" height="90"/><rect x="244" y="120" width="36" height="90"/>
+      <path d="M150 90 l0 -12 h12 v8 h12 v-8 h12 v8 h12 v-8 h12 v8 h12 v-8 h16 v12Z"/></g>
+      <path d="M200 70 v-30 l24 8 -24 8" fill="#c8402e" stroke="${INK}" stroke-width="3"/>
+      ${[[180, 130], [210, 130], [136, 150], [258, 150]].map(([x, y]) => `<rect x="${x}" y="${y}" width="10" height="16" fill="#ffb84a"/>`).join('')}`,
+    // Château du Roi Pêcheur (Corbénic) : château doré sur la rivière, barque du roi
+    corbenic: `<rect width="400" height="300" fill="#ffe0d0"/>
+      ${Array.from({ length: 10 }, (_, k) => `<path d="M200 110 L${200 + Math.cos(k / 10 * 6.283) * 400} ${110 + Math.sin(k / 10 * 6.283) * 400} L${200 + Math.cos((k + .4) / 10 * 6.283) * 400} ${110 + Math.sin((k + .4) / 10 * 6.283) * 400}Z" fill="#fff0e4"/>`).join('')}
+      <rect y="200" width="400" height="100" fill="#6ab0d8"/>
+      <g fill="#f3e0b0" stroke="${INK}" stroke-width="4"><rect x="140" y="100" width="120" height="100"/><rect x="110" y="80" width="40" height="120"/><rect x="250" y="80" width="40" height="120"/>
+      <path d="M110 80 L130 40 L150 80Z" fill="#f5c53a"/><path d="M250 80 L270 40 L290 80Z" fill="#f5c53a"/><path d="M180 100 L200 60 L220 100Z" fill="#f5c53a"/></g>
+      <path d="M180 200 v-30 a20 20 0 0 1 40 0 v30Z" fill="#7a4a2a" stroke="${INK}" stroke-width="3"/>
+      <path d="M60 250 q40 18 80 0 l-8 12 h-64 Z" fill="#a8693a" stroke="${INK}" stroke-width="3"/>
+      <path d="M100 248 v-40 m0 6 q30 10 50 50" stroke="${INK}" stroke-width="2.5" fill="none"/>
+      <path d="M0 215 q100 -10 200 0 t200 0" stroke="#fff" stroke-width="8" opacity=".5" fill="none"/>`,
   }[theme] || '';
   return `<svg width="400" height="300" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">${body}</svg>`;
 }

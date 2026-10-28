@@ -1,9 +1,18 @@
-// Cour de Camelot (écran titre et écran Camelot), dessinée en SVG.
-// Format vertical pensé pour les téléphones. chars : personnages débloqués (debout dans la cour),
+// Cour de Kaamelott (écran titre et écran de restauration), dessinée en SVG.
+// Format vertical pensé pour les téléphones. chars : personnages débloqués,
 // decor : décorations achetées avec l'or des coups d'avance (voir DECOR dans data.js).
+// layout 'title' : compagnons dans la cour (écran titre, où le menu couvre l'herbe) ;
+// layout 'full' : compagnons sur l'herbe, pour que chaque décoration de la cour reste visible.
+// view : [x, y, largeur, hauteur] pour ne montrer qu'une partie (aperçus des décorations).
 import { INK, portrait } from './art.js';
 
-export function courtyard({ chars = [], decor = [] } = {}) {
+// Partie de la cour où se trouve chaque décoration (aperçus de la liste).
+export const DECOR_VIEW = {
+  bannieres: [96, 176, 168, 126], fleurs: [0, 300, 180, 135], fontaine: [0, 330, 130, 98], vitraux: [104, 136, 152, 114],
+  statue: [232, 306, 128, 96], table: [100, 318, 160, 120], toits: [0, 8, 360, 270], feux: [0, 0, 360, 270],
+};
+
+export function courtyard({ chars = [], decor = [], layout = 'title', view = null } = {}) {
   const has = d => decor.includes(d);
   const roofA = has('toits') ? '#ffd24a' : '#c8402e', roofB = has('toits') ? '#f5b52a' : '#2f5fb3';
   const stone = '#e2cfa6', stoneDark = '#c9b184';
@@ -22,9 +31,9 @@ export function courtyard({ chars = [], decor = [] } = {}) {
     `<path d="M${cx} ${y - h} v-16" stroke="${INK}" stroke-width="2.5"/><path d="M${cx} ${y - h - 16} l16 5 -16 5" fill="${flag}" ${ink(2)}/>`;
 
   let s = `<defs><linearGradient id="cs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffefc0"/><stop offset="1" stop-color="#ffc66e"/></linearGradient></defs>`;
-  s += `<rect width="360" height="640" fill="url(#cs)"/><circle cx="292" cy="96" r="36" fill="#fff6c8"/>`;
+  s += `<rect width="360" height="640" fill="url(#cs)"/><circle cx="56" cy="96" r="30" fill="#fff6c8"/>`;
   if (has('feux')) {
-    for (const [x, y, c] of [[70, 120, '#e8263a'], [200, 60, '#2fb0e8'], [300, 190, '#9b59d0'], [120, 210, '#f5c53a']]) {
+    for (const [x, y, c] of [[300, 70, '#e8263a'], [236, 30, '#2fb0e8'], [320, 168, '#9b59d0'], [104, 190, '#f5c53a'], [40, 200, '#2fd07a']]) {
       for (let k = 0; k < 12; k++) {
         const a = k / 12 * Math.PI * 2;
         s += `<path d="M${x + Math.cos(a) * 8} ${y + Math.sin(a) * 8} L${x + Math.cos(a) * 26} ${y + Math.sin(a) * 26}" stroke="${c}" stroke-width="3.5" stroke-linecap="round"/>`;
@@ -32,7 +41,7 @@ export function courtyard({ chars = [], decor = [] } = {}) {
       s += `<circle cx="${x}" cy="${y}" r="4" fill="#fff"/>`;
     }
   }
-  for (const [x, y, r] of [[60, 70, 34], [210, 40, 28], [320, 170, 24]]) {
+  for (const [x, y, r] of [[130, 52, 30], [250, 110, 22]]) {
     s += `<g fill="#fffdf4" ${ink(2)}><ellipse cx="${x}" cy="${y}" rx="${r}" ry="${r * 0.45}"/>` +
       `<ellipse cx="${x - r * 0.4}" cy="${y - r * 0.25}" rx="${r * 0.5}" ry="${r * 0.4}"/><ellipse cx="${x + r * 0.35}" cy="${y - r * 0.3}" rx="${r * 0.45}" ry="${r * 0.38}"/></g>`;
   }
@@ -65,28 +74,41 @@ export function courtyard({ chars = [], decor = [] } = {}) {
   s += `<path d="M0 430 Q180 412 360 430 V640 H0 Z" fill="#8cc45a" ${ink()}/>`;
   if (has('fleurs')) {
     for (let k = 0; k < 22; k++) s += `<circle cx="${8 + k * 16}" cy="${330 + (k % 2) * 4}" r="4.5" fill="${['#e8263a', '#f5c53a', '#ff8ac8', '#ffffff'][k % 4]}" ${ink(1.5)}/>`;
-    for (let k = 0; k < 18; k++) s += `<circle cx="${14 + k * 19}" cy="${446 + (k % 3) * 6}" r="5" fill="${['#ff8ac8', '#ffffff', '#f5c53a'][k % 3]}" ${ink(1.5)}/>`;
+    for (let k = 0; k < 18; k++) s += `<circle cx="${14 + k * 19}" cy="${436 + (k % 3) * 5}" r="5" fill="${['#ff8ac8', '#ffffff', '#f5c53a'][k % 3]}" ${ink(1.5)}/>`;
   }
+  const full = layout === 'full';
   if (has('fontaine')) {
-    s += `<ellipse cx="44" cy="378" rx="34" ry="12" fill="#9aa4ae" ${ink()}/><ellipse cx="44" cy="374" rx="26" ry="7" fill="#7ad0f0"/>` +
-      `<rect x="39" y="344" width="10" height="30" fill="#9aa4ae" ${ink(2)}/><path d="M44 344 q-14 -14 -22 10 M44 344 q14 -14 22 10" fill="none" stroke="#7ad0f0" stroke-width="3.5"/>`;
+    const fx = full ? 62 : 44, fy = full ? 392 : 378;
+    s += `<ellipse cx="${fx}" cy="${fy}" rx="38" ry="13" fill="#9aa4ae" ${ink()}/><ellipse cx="${fx}" cy="${fy - 4}" rx="30" ry="8" fill="#7ad0f0"/>` +
+      `<rect x="${fx - 5}" y="${fy - 36}" width="10" height="32" fill="#9aa4ae" ${ink(2)}/><path d="M${fx} ${fy - 36} q-16 -16 -26 12 M${fx} ${fy - 36} q16 -16 26 12" fill="none" stroke="#7ad0f0" stroke-width="4"/>`;
   }
-  if (has('statue')) {
-    s += `<rect x="296" y="360" width="40" height="22" fill="#b8b0a4" ${ink()}/><path d="M306 360 v-26 q10 -10 20 0 v26 Z" fill="#c9c2b8" ${ink()}/>` +
-      `<circle cx="316" cy="324" r="8" fill="#c9c2b8" ${ink()}/><path d="M309 317 l2 -7 3 5 2 -6 2 6 3 -5 2 7 Z" fill="#f5c53a" ${ink(1.5)}/>` +
-      `<path d="M330 362 v-40" stroke="#dfe7ef" stroke-width="4"/><path d="M325 330 h10" stroke="${INK}" stroke-width="3"/>`;
+  if (has('statue')) { // statue d'Uther Pendragon : socle, corps, couronne et épée
+    const [x, y] = full ? [300, 404] : [316, 382];
+    s += `<rect x="${x - 22}" y="${y - 22}" width="44" height="22" fill="#b8b0a4" ${ink()}/><path d="M${x - 11} ${y - 22} v-28 q11 -11 22 0 v28 Z" fill="#c9c2b8" ${ink()}/>` +
+      `<circle cx="${x}" cy="${y - 59}" r="9" fill="#c9c2b8" ${ink()}/><path d="M${x - 8} ${y - 66} l2 -8 3 5 3 -7 3 7 3 -5 2 8 Z" fill="#f5c53a" ${ink(1.5)}/>` +
+      `<path d="M${x + 16} ${y - 20} v-44" stroke="#dfe7ef" stroke-width="4"/><path d="M${x + 10} ${y - 54} h12" stroke="${INK}" stroke-width="3"/>`;
   }
-  if (has('table')) {
-    s += `<ellipse cx="180" cy="356" rx="62" ry="14" fill="#a8693a" ${ink()}/><ellipse cx="180" cy="353" rx="54" ry="9" fill="#c98a4a"/>`;
+  if (has('table')) { // la Table ronde et ses sièges
+    const [x, y] = full ? [180, 392] : [180, 356];
+    for (const dx of [-58, -30, 0, 30, 58]) s += `<rect x="${x + dx - 7}" y="${y - 24}" width="14" height="16" rx="3" fill="#7a4a2a" ${ink(2)}/>`;
+    s += `<ellipse cx="${x}" cy="${y}" rx="66" ry="15" fill="#a8693a" ${ink()}/><ellipse cx="${x}" cy="${y - 3}" rx="58" ry="10" fill="#c98a4a"/>` +
+      `<ellipse cx="${x}" cy="${y - 3}" rx="58" ry="10" fill="none" stroke="#f5c53a" stroke-width="2.5"/>`;
   }
-  // Compagnons débloqués : jusqu'à 7 devant, les autres derrière
-  const back = chars.slice(0, Math.max(0, chars.length - 7)), front = chars.slice(back.length);
-  const row = (list, feet, size) => list.map((c, k) => {
-    const x = list.length === 1 ? 180 : 66 + k * (228 / (list.length - 1));
-    return figure(c, x, feet, size);
-  }).join('');
-  s += row(back, 374, 32) + row(front, 414, 40);
-  return `<svg width="360" height="640" viewBox="0 0 360 640" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">${s}</svg>`;
+  const row = (list, feet, size, x0, gap) => list.map((c, k) => figure(c, x0 + k * gap, feet, size)).join('');
+  if (full) {
+    // Compagnons sur l'herbe, par rangées de 6, la plus récente au fond : rien ne cache la cour.
+    const rows = [];
+    for (let k = 0; k < chars.length; k += 6) rows.push(chars.slice(k, k + 6));
+    rows.forEach((list, r) => { s += row(list, 604 - (rows.length - 1 - r) * 46, 38, 180 - (list.length - 1) * 28, 56); });
+  } else {
+    // Écran titre : jusqu'à 7 devant, les autres derrière, dans la cour (l'herbe est sous le menu).
+    const back = chars.slice(0, Math.max(0, chars.length - 7)), front = chars.slice(back.length);
+    const spread = list => (list.length === 1 ? [180, 0] : [66, 228 / (list.length - 1)]);
+    s += row(back, 374, 32, ...spread(back)) + row(front, 414, 40, ...spread(front));
+  }
+  const [vx, vy, vw, vh] = view || (full ? [0, 0, 360, 624] : [0, 0, 360, 640]);
+  const fit = view || full ? 'xMidYMid meet' : 'xMidYMid slice';
+  return `<svg width="${vw}" height="${vh}" viewBox="${vx} ${vy} ${vw} ${vh}" preserveAspectRatio="${fit}" xmlns="http://www.w3.org/2000/svg">${s}</svg>`;
 }
 
 function figure(c, x, feet, size) {

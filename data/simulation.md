@@ -51,7 +51,7 @@
 | 47 | 28 | 45 Fromage, 45 Épée, 45 Chope | 56 % | 4.2 |
 | 48 | 24 | 3 reliques, pierres | 61 % | 7.2 |
 | 49 | 26 | score 6700 | 57 % | 6.5 |
-| 50 | 20 | toiles, pierres, 2 reliques | 40 % (19 coups) → 20 coups | 3.9 |
+| 50 | 20 | toiles, pierres, 2 reliques | 46 % | 4.3 |
 | 51 | 26 | 55 Graal | 56 % | 4.3 |
 | 52 | 17 | toiles | 67 % | 3.8 |
 | 53 | 21 | 3 reliques | 58 % | 6.4 |
@@ -62,3 +62,33 @@
 | 58 | 38 | toiles | 47 % | 9.5 |
 | 59 | 25 | toiles, pierres, 3 reliques | 63 % | 6.4 |
 | 60 | 25 | toiles, pierres, 3 reliques, 30 Graal | 48 % | 5.4 |
+| 61 | 24 | score 23500 | 52 % | 5.0 |
+| 62 | 17 | toiles | 52 % | 3.7 |
+| 63 | 22 | 3 reliques | 54 % | 7.4 |
+| 64 | 26 | 25 Graal, 25 Couronne | 60 % | 4.9 |
+| 65 | 12 | toiles, pierres | 49 % | 2.1 |
+| 66 | 24 | toiles | 57 % | 4.5 |
+| 67 | 29 | 4 reliques, pierres | 47 % | 6.3 |
+| 68 | 26 | 40 Fromage, 40 Épée, 40 Bouclier | 59 % | 4.1 |
+| 69 | 17 | toiles, pierres | 57 % | 3.9 |
+| 70 | 25 | toiles, pierres, 3 reliques | 48 % | 5.1 |
+| 71 | 26 | score 6900 | 55 % | 6.2 |
+| 72 | 12 | pierres | 56 % | 2.3 |
+| 73 | 20 | 3 reliques | 53 % | 6.0 |
+| 74 | 30 | toiles | 52 % | 6.5 |
+| 75 | 28 | 30 Graal, 30 Chope, 30 Couronne | 56 % | 4.6 |
+| 76 | 33 | toiles, pierres | 54 % | 6.1 |
+| 77 | 29 | 4 reliques, toiles | 48 % | 6.7 |
+| 78 | 26 | score 6200 | 55 % | 6.5 |
+| 79 | 16 | toiles, pierres | 47 % | 2.9 |
+| 80 | 27 | toiles, pierres, 3 reliques, 25 Graal | 48 % | 5.0 |
+| 81 | 26 | 65 Graal | 53 % | 3.5 |
+| 82 | 30 | toiles | 53 % | 5.8 |
+| 83 | 36 | 4 reliques | 56 % | 11.5 |
+| 84 | 28 | 35 Graal, 35 Fromage, 35 Épée | 50 % | 4.4 |
+| 85 | 25 | pierres | 62 % | 4.6 |
+| 86 | 23 | toiles, pierres | 55 % | 4.8 |
+| 87 | 21 | 3 reliques, toiles | 49 % | 5.4 |
+| 88 | 26 | score 7400 | 48 % | 6.3 |
+| 89 | 26 | toiles, pierres, 3 reliques | 49 % | 6.0 |
+| 90 | 33 | toiles, pierres, 4 reliques, 30 Graal | 48 % | 6.5 |

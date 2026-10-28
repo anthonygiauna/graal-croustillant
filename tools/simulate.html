@@ -27,7 +27,7 @@ et n'utilise ni compagnon ni les +5 coups de Merlin. Objectif : 40 Ã  70 % de rÃ
   const { levels } = prepare(raw);
   const only = new URLSearchParams(location.search).get('levels');
   const pick = only ? levels.filter(l => only.split(',').map(Number).includes(l.id)) : levels;
-  const target = l => (l.id <= 3 ? 0.68 : l.boss ? 0.45 : 0.56);
+  const target = l => (l.id <= 3 ? 0.68 : l.boss ? (l.id > 60 ? 0.43 : 0.45) : l.id > 60 ? 0.52 : 0.56);
 
   async function go(tune) {
     const t0 = performance.now();

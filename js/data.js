@@ -150,7 +150,10 @@ export const TROPHIES = [
   { id: 'friends7', title: 'Bande de joyeux lurons', desc: 'Débloquer 7 personnages.', check: s => s.unlocked.length >= 7 },
   { id: 'friends-all', title: 'Tout Kaamelott dans la poche', desc: 'Débloquer tous les personnages.', check: s => s.unlocked.length >= CHARACTERS.length },
   { id: 'camelot', title: 'Kaamelott comme neuf', desc: "Restaurer tout Kaamelott avec l'or des coups d'avance.", check: s => (s.decor || []).length >= 8 },
-  { id: 'the-end', title: 'Le Graal est croustillant', desc: 'Terminer le jeu.', check: s => !!s.levels[60] },
+  { id: 'the-end', title: 'Le Graal est croustillant', desc: 'Terminer la quête du Graal (niveau 60).', check: s => !!s.levels[60] },
+  { id: 'avalon', title: 'Séché au soleil', desc: "Terminer le chapitre de l'île d'Avalon.", check: s => !!s.levels[70] },
+  { id: 'the-legend', title: 'Rendu au Roi Pêcheur', desc: 'Terminer les 90 niveaux.', check: s => !!s.levels[90] },
+  { id: 'stars240', title: "Plus d'étoiles que Merlin", desc: 'Réunir 240 étoiles.', check: s => starsTotal(s) >= 240 },
 ];
 
 export { starsTotal };
@@ -214,7 +217,40 @@ export const DIALOGUES = {
     ['perceval', "Alors, on en fait quoi, du Graal ?"],
     ['guenievre', "On le met au milieu de la table, et on organise enfin une réunion qui sert à quelque chose."],
     ['morgane', "Avec une chaise pour moi."],
-    ['narrateur', "Et c'est ainsi que la Table ronde tint sa première réunion réussie. Elle dura quatre minutes. Fin."],
+    ['narrateur', "Et c'est ainsi que la Table ronde tint sa première réunion réussie. Elle dura quatre minutes. Fin ? Pas tout à fait…"],
+  ],
+  7: [
+    ['narrateur', "Trois semaines après la réunion réussie, le Graal a un problème. Il ne croustille plus."],
+    ['arthur', "Il est… mou. Le Graal sacré est tout mou."],
+    ['merlin', "L'humidité de Kaamelott. Je l'avais prédit. Il faut l'emmener à Avalon, l'île où tout sèche au soleil, même les reliques."],
+    ['morgane', "Avalon, c'est chez moi. Enfin, chez ma tante. Essuyez vos pieds en arrivant."],
+    ['perceval', "Avalon, c'est une île ? Il faut savoir nager ?"],
+    ['dame', "Je vous prête une barque. Ramenez-la, cette fois."],
+  ],
+  8: [
+    ['narrateur', "Le Graal croustille à nouveau. La troupe rentre, toute fière. Mais une ombre l'attend sur le chemin."],
+    ['narrateur', "Mordred, le neveu d'Arthur, a volé le Graal pendant que Lancelot se recoiffait."],
+    ['lancelot', "Ma mèche avait besoin d'attention. C'était une urgence."],
+    ['arthur', "Mordred ! Rends-moi ce Graal, et tu seras seulement privé de dessert pendant un an."],
+    ['keu', "J'ai noté le vol dans le registre. Ligne 4 012. Juste après « cuillère disparue »."],
+    ['gauvain', "Laissez-moi négocier. Je lui propose trois coups de plus et une tarte."],
+  ],
+  9: [
+    ['narrateur', "Le Graal est récupéré. Reste à le rendre à son vrai gardien : le Roi Pêcheur, dans son château de Corbénic."],
+    ['galaad', "Le Roi Pêcheur m'attend. Je l'ai toujours su. Je sais toujours tout, d'ailleurs."],
+    ['perceval', "Il pêche quoi, le Roi Pêcheur ? Des Graals ?"],
+    ['tristan', "J'ai écrit un poème sur la pêche. Il fait quarante pages. Je commence ?"],
+    ['gaspard', "Des ponts qui bougent, de l'eau partout et un roi blessé… Je garde l'entrée. De loin."],
+    ['arthur', "En avant, une dernière fois !"],
+  ],
+  fin2: [
+    ['narrateur', "Au château de Corbénic, le Roi Pêcheur prend le Graal dans ses mains. Le château s'illumine, et le vieux roi se relève, guéri."],
+    ['arthur', "Majesté, nous vous le rendons. Il est croustillant, il a séché à Avalon, et il n'a presque pas été volé."],
+    ['galaad', "Je savais que ça finirait bien."],
+    ['morgane', "Bon. Et maintenant, on mange quoi ?"],
+    ['gontran', "J'ai apporté de la cervoise. Beaucoup de cervoise."],
+    ['merlin', "Je vois l'avenir… Je vois… d'autres niveaux. Peut-être. Ma boule de cristal est un peu sale."],
+    ['narrateur', "Et la Table ronde rentra à Kaamelott, où une cour toute restaurée l'attendait. Fin. Pour de vrai, cette fois. Sans doute."],
   ],
 };
 
