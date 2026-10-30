@@ -23,4 +23,4 @@ Pour sauvegarder une progression plus récente : Réglages → « Copier mon cod
 ## Si un jour on reprend
 
 - Mise en ligne Render (site statique branché sur le dépôt public) : pour publier une modification, push puis « Manual Deploy » → « Deploy latest commit » dans Render. Les téléphones se mettent à jour tout seuls (service worker réseau d'abord, rechargement hors partie) ; changer `VERSION` dans `sw.js` quand la liste des fichiers change.
-- Difficulté réglée par le bot : 90 niveaux sur 90 entre 40 et 70 % de réussite (rapport dans data/simulation.md).
+- Difficulté réglée par le bot : 150 niveaux sur 150 entre 40 et 70 % de réussite (rapport dans data/simulation.md).

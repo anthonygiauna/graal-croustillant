@@ -462,7 +462,7 @@ export function bonusPhase(g, ev) {
 }
 
 // ---------- Pouvoirs des compagnons (une fois par niveau, ne coûtent pas de coup) ----------
-export const TARGETED = { toRow: 1, toBomb: 1, toGrail: 1, col: 1, bomb3: 1 };
+export const TARGETED = { toRow: 1, toBomb: 1, toGrail: 1, col: 1, bomb3: 1, diag: 1 };
 
 function randomCells(g, n, filter = p => !p.relic) {
   const pool = [];
@@ -544,6 +544,18 @@ export function usePower(g, power, t, ev) {
     case 'bombs2': // Galaad
       convert(randomCells(g, 2, q => !q.relic && !q.sp), q => piece(g, q.c, 'bomb'));
       return true;
+    case 'mix3': // Iseut : 3 pièces deviennent Épées ou Catapultes au hasard
+      convert(randomCells(g, 3, q => !q.relic && !q.sp), q => piece(g, q.c, ['row', 'col', 'bomb'][ri(g.rng, 3)]));
+      return true;
+    case 'diag': { // Bédivère : les deux diagonales qui passent par la case choisie
+      if (t === undefined || t === null || g.hole[t]) return false;
+      const cells = [];
+      for (let i = 0; i < N; i++) {
+        if (!g.hole[i] && Math.abs(rowOf(i) - rowOf(t)) === Math.abs(colOf(i) - colOf(t))) cells.push(i);
+      }
+      blast = { cells, fx: cells.map(i => ({ k: 'poof', i, area: [i] })) };
+      break;
+    }
     default: return false;
   }
   resolve(g, ev, null, blast);

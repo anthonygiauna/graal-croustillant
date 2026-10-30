@@ -105,6 +105,18 @@ export const CHARACTERS = [
     power: 'bombs2', powerName: 'Lumière sacrée', powerDesc: "Change 2 pièces au hasard en Catapultes.",
     unlock: { type: 'level', value: 55 },
     look: { skin: '#f6d8c0', hair: '#f5e6a0', hairStyle: 'short', hat: 'none', cloth: '#f4f4f8', cape: '#e8263a', bg: '#fff2c0', mouth: 'smile' } },
+  { id: 'bedivere', name: 'Bédivère', title: 'Chevalier à une main',
+    bio: "Le plus fidèle compagnon d'Arthur. Il n'a qu'une main, mais elle est redoutablement efficace. La légende dit que c'est lui qui rendra un jour Excalibur au lac.",
+    hello: "Je te serre la main. La seule que j'ai, donc c'est un honneur.",
+    power: 'diag', powerName: 'Coup de travers', powerDesc: "Tranche les deux diagonales qui passent par la case de ton choix.",
+    unlock: { type: 'level', value: 110 },
+    look: { skin: '#e8b890', hair: '#8a5a2a', hairStyle: 'short', beard: 'short', hat: 'helmet', cloth: '#4a6a8a', bg: '#c8d8e8', mouth: 'smile' } },
+  { id: 'iseut', name: 'Iseut', title: 'La Blonde, guérisseuse',
+    bio: "Princesse d'Irlande et guérisseuse réputée. Elle a une potion pour tout : les blessures, les rhumes, et les chevaliers qui chantent trop longtemps.",
+    hello: "Bois ça. Non, ne demande pas ce qu'il y a dedans. Ça marche, c'est tout.",
+    power: 'mix3', powerName: 'Philtre magique', powerDesc: "Transforme 3 pièces au hasard en pièces spéciales.",
+    unlock: { type: 'level', value: 130 },
+    look: { skin: '#f8dcc4', hair: '#f5d76a', hairStyle: 'long', hat: 'tiara', cloth: '#2fa07a', bg: '#c8f0dc', mouth: 'smile' } },
 ];
 
 export const unlockText = u => ({
@@ -149,11 +161,15 @@ export const TROPHIES = [
   { id: 'stars150', title: 'Voie lactée de Kaamelott', desc: 'Réunir 150 étoiles.', check: s => starsTotal(s) >= 150 },
   { id: 'friends7', title: 'Bande de joyeux lurons', desc: 'Débloquer 7 personnages.', check: s => s.unlocked.length >= 7 },
   { id: 'friends-all', title: 'Tout Kaamelott dans la poche', desc: 'Débloquer tous les personnages.', check: s => s.unlocked.length >= CHARACTERS.length },
-  { id: 'camelot', title: 'Kaamelott comme neuf', desc: "Restaurer tout Kaamelott avec l'or des coups d'avance.", check: s => (s.decor || []).length >= 8 },
+  { id: 'camelot', title: 'Kaamelott comme neuf', desc: "Restaurer tout Kaamelott avec l'or des coups d'avance.", check: s => DECOR.filter(d => d.place === 'kaamelott').every(d => (s.decor || []).includes(d.id)) },
+  { id: 'royaume', title: 'Le royaume restauré', desc: 'Réparer tous les lieux : Kaamelott, le Lac de la Dame et la Tour de Merlin.', check: s => DECOR.every(d => (s.decor || []).includes(d.id)) },
   { id: 'the-end', title: 'Le Graal est croustillant', desc: 'Terminer la quête du Graal (niveau 60).', check: s => !!s.levels[60] },
   { id: 'avalon', title: 'Séché au soleil', desc: "Terminer le chapitre de l'île d'Avalon.", check: s => !!s.levels[70] },
   { id: 'the-legend', title: 'Rendu au Roi Pêcheur', desc: 'Terminer les 90 niveaux.', check: s => !!s.levels[90] },
   { id: 'stars240', title: "Plus d'étoiles que Merlin", desc: 'Réunir 240 étoiles.', check: s => starsTotal(s) >= 240 },
+  { id: 'merlin-free', title: "Merlin à l'air libre", desc: 'Terminer le chapitre de la Tour de Merlin.', check: s => !!s.levels[120] },
+  { id: 'excalibur', title: 'Excalibur retrouvée', desc: 'Terminer les 150 niveaux.', check: s => !!s.levels[150] },
+  { id: 'stars400', title: 'Le ciel de Kaamelott', desc: 'Réunir 400 étoiles.', check: s => starsTotal(s) >= 400 },
 ];
 
 export { starsTotal };
@@ -252,6 +268,58 @@ export const DIALOGUES = {
     ['merlin', "Je vois l'avenir… Je vois… d'autres niveaux. Peut-être. Ma boule de cristal est un peu sale."],
     ['narrateur', "Et la Table ronde rentra à Kaamelott, où une cour toute restaurée l'attendait. Fin. Pour de vrai, cette fois. Sans doute."],
   ],
+  10: [
+    ['narrateur', "Kaamelott fête le retour du Graal. Pendant le banquet, Arthur pose Excalibur sur la table, juste à côté du fromage."],
+    ['arthur', "Quelqu'un a vu Excalibur ? Je l'avais posée là. À côté du fromage."],
+    ['perceval', "Ah, c'était à vous ? Je m'en suis servi pour couper le fromage, puis je l'ai prêtée à un monsieur très gentil."],
+    ['keu', "Le monsieur très gentil s'est enfui par le Pont de l'Épée. J'ai tout noté dans le registre."],
+    ['lancelot', "Le Pont de l'Épée ? Une lame tranchante au-dessus du vide ? Je l'ai déjà traversé. Pieds nus. Avec style."],
+    ['gaspard', "Moi, je traverse à quatre pattes. Ou je ne traverse pas. Plutôt je ne traverse pas."],
+  ],
+  11: [
+    ['narrateur', "La piste mène au Val sans Retour, la vallée enchantée où Morgane piégeait autrefois les chevaliers infidèles."],
+    ['morgane', "C'était une autre époque. J'ai changé. Enfin, presque. Évitez de mentir en passant, par précaution."],
+    ['lancelot', "Aucun souci, je ne mens jamais. Sauf sur mon âge."],
+    ['galaad', "Moi, je ne mens jamais du tout. Je le précise, au cas où."],
+    ['arthur', "Personne ne ment, tout le monde avance, et on sort de ce val avant le dîner."],
+  ],
+  12: [
+    ['narrateur', "Au fond de Brocéliande se dresse une tour faite d'air et de brume. Merlin y a disparu pendant la nuit."],
+    ['dame', "C'est moi qui l'ai enfermé. Il m'avait appris le sort et voulait vérifier que je l'avais bien retenu."],
+    ['merlin', "(de l'intérieur) Très bien retenu ! Bravo ! Maintenant, ouvrez !"],
+    ['dame', "Il faut aligner les bonnes pièces pour dissiper la brume. Et non, je ne me souviens plus de la formule inverse."],
+    ['guenievre', "Personne ne se souvient de rien dans ce royaume. Allez, au travail."],
+  ],
+  13: [
+    ['narrateur', "Libéré, Merlin a une vision : le voleur cache Excalibur à Tintagel, le château sur la falaise où Arthur est né."],
+    ['merlin', "Je l'ai vu dans les nuages. Ou dans ma soupe. Bref, c'est à Tintagel."],
+    ['arthur', "Ma maison natale ! J'y ai encore ma chambre. Et mon doudou."],
+    ['tristan', "Tintagel… c'est là que j'ai rencontré Iseut. J'ai écrit une ballade de soixante couplets à ce sujet."],
+    ['iseut', "Elle en fait quatre-vingts. Je les ai comptés pendant qu'il chantait."],
+  ],
+  14: [
+    ['narrateur', "Le voleur a filé vers la plaine de Salisbury, où se dressent les grandes pierres que Merlin aurait posées lui-même."],
+    ['merlin', "Je les ai portées une par une. Avec un peu de magie. Beaucoup de magie, en fait."],
+    ['bedivere', "Le voleur a planté Excalibur au milieu du cercle de pierres. Il dit que seul le vrai roi pourra la retirer."],
+    ['arthur', "Encore ? J'ai déjà fait ce numéro une fois."],
+    ['gauvain', "Je négocie : on reprend l'épée, et en échange on lui laisse les pierres."],
+  ],
+  15: [
+    ['narrateur', "Excalibur retrouvée, la troupe rentre à Kaamelott. Mais pendant l'absence de tout le monde, la cour s'est couverte de toiles, de pierres et de reliques égarées."],
+    ['guenievre', "Je m'absente cinq chapitres et voilà le résultat."],
+    ['keu', "J'ai tout inventorié. Il y a du ménage pour dix niveaux."],
+    ['gontran', "Et un banquet à préparer. Je m'occupe de la cervoise."],
+    ['arthur', "Au travail, compagnons. Une dernière fois. Encore."],
+  ],
+  fin3: [
+    ['narrateur', "Kaamelott brille comme jamais. Excalibur est accrochée au mur de la grande salle, bien loin du fromage."],
+    ['arthur', "Mes amis, je déclare ce banquet ouvert. Et cette fois, personne ne prête mon épée."],
+    ['perceval', "Même pas pour couper le gâteau ?"],
+    ['bedivere', "Si un jour il faut rendre Excalibur au lac, je m'en chargerai. Promis, je ne la garderai pas."],
+    ['dame', "J'y compte bien. Je lui ai déjà fait une place sur l'étagère."],
+    ['merlin', "Je vois l'avenir… Je vois {nom}, qui a terminé cent cinquante niveaux. Respect. Même moi, je n'y serais pas arrivé."],
+    ['narrateur', "Et le banquet dura trois jours. Fin. Vraiment. Enfin… jusqu'au prochain patch."],
+  ],
 };
 
 export const TUTORIALS = {
@@ -313,14 +381,34 @@ export const COMBO_WORDS = ['', '', 'Joli !', 'Superbe !', 'Prodigieux !', 'Lég
 // Décorations de Kaamelott, achetées avec l'or des coups d'avance (1 pièce par coup restant à la victoire,
 // le double à partir de 10 coups). Elles apparaissent dans la cour (courtyard.js).
 export const DECOR = [
-  { id: 'bannieres', name: 'Bannières royales', desc: 'Aux couleurs de Kaamelott, accrochées aux remparts.', cost: 5 },
-  { id: 'fleurs', name: 'Parterres de fleurs', desc: 'Guenièvre trouvait la cour un peu triste.', cost: 10 },
-  { id: 'fontaine', name: 'Fontaine de la Dame du Lac', desc: "Elle a insisté pour l'installer. L'eau est un peu magique.", cost: 20 },
-  { id: 'vitraux', name: 'Vitraux colorés', desc: 'Toutes les fenêtres du château passent en couleurs.', cost: 30 },
-  { id: 'statue', name: "Statue d'Uther Pendragon", desc: "Le père d'Arthur, en pierre, l'air sévère comme de son vivant.", cost: 45 },
-  { id: 'table', name: 'La Table ronde', desc: 'Sortie dans la cour pour les grandes occasions.', cost: 60 },
-  { id: 'toits', name: "Toits d'or", desc: "Les tours brillent jusqu'à Brocéliande.", cost: 80 },
-  { id: 'feux', name: 'Feux de Merlin', desc: "Un feu d'artifice permanent. Merlin n'a jamais trouvé comment l'arrêter.", cost: 100 },
+  { id: 'bannieres', place: 'kaamelott', name: 'Bannières royales', desc: 'Aux couleurs de Kaamelott, accrochées aux remparts.', cost: 5 },
+  { id: 'fleurs', place: 'kaamelott', name: 'Parterres de fleurs', desc: 'Guenièvre trouvait la cour un peu triste.', cost: 10 },
+  { id: 'fontaine', place: 'kaamelott', name: 'Fontaine de la Dame du Lac', desc: "Elle a insisté pour l'installer. L'eau est un peu magique.", cost: 20 },
+  { id: 'vitraux', place: 'kaamelott', name: 'Vitraux colorés', desc: 'Toutes les fenêtres du château passent en couleurs.', cost: 30 },
+  { id: 'statue', place: 'kaamelott', name: "Statue d'Uther Pendragon", desc: "Le père d'Arthur, en pierre, l'air sévère comme de son vivant.", cost: 45 },
+  { id: 'table', place: 'kaamelott', name: 'La Table ronde', desc: 'Sortie dans la cour pour les grandes occasions.', cost: 60 },
+  { id: 'toits', place: 'kaamelott', name: "Toits d'or", desc: "Les tours brillent jusqu'à Brocéliande.", cost: 80 },
+  { id: 'feux', place: 'kaamelott', name: 'Feux de Merlin', desc: "Un feu d'artifice permanent. Merlin n'a jamais trouvé comment l'arrêter.", cost: 100 },
+  { id: 'ponton', place: 'lac', name: 'Ponton de bois', desc: 'Pour accoster sans se mouiller les pieds (la Dame, elle, s’en moque).', cost: 30 },
+  { id: 'nenuphars', place: 'lac', name: 'Nénuphars en fleurs', desc: 'Les grenouilles du royaume ont enfin un salon.', cost: 40 },
+  { id: 'saules', place: 'lac', name: 'Saules pleureurs', desc: 'Ils pleurent de joie. Enfin, on suppose.', cost: 50 },
+  { id: 'barque', place: 'lac', name: 'Barque de la Dame', desc: 'Celle qu’on lui avait empruntée pour Avalon, enfin rendue.', cost: 60 },
+  { id: 'lanternes', place: 'lac', name: 'Lanternes flottantes', desc: 'Le lac brille même la nuit, pour les promenades romantiques.', cost: 70 },
+  { id: 'rocher', place: 'lac', name: 'Rocher de l’Épée', desc: 'Une copie d’Excalibur plantée dans le roc, pour les touristes.', cost: 90 },
+  { id: 'jardin', place: 'tour', name: 'Jardin d’herbes magiques', desc: 'Menthe, sauge et racine-qui-chante. Ne pas cueillir la nuit.', cost: 40 },
+  { id: 'chaudron', place: 'tour', name: 'Chaudron bouillonnant', desc: 'Merlin dit que c’est pour les potions. Ça sent la soupe.', cost: 60 },
+  { id: 'hibou', place: 'tour', name: 'Le hibou de la tour', desc: 'Il sait tout, mais ne répond qu’aux questions bien posées.', cost: 70 },
+  { id: 'escalier', place: 'tour', name: 'Escalier en colimaçon', desc: 'Pour monter sans se téléporter par erreur dans la cuisine.', cost: 90 },
+  { id: 'telescope', place: 'tour', name: 'Télescope des étoiles', desc: 'Merlin y lit l’avenir. Surtout la météo.', cost: 110 },
+  { id: 'etoiles', place: 'tour', name: 'Ciel enchanté', desc: 'Des aurores et des constellations toutes neuves au-dessus de la tour.', cost: 140 },
 ];
+
+// Lieux à restaurer : Kaamelott dès le début, les autres se débloquent en avançant dans la quête.
+export const PLACES = [
+  { id: 'kaamelott', name: 'Kaamelott', level: 0 },
+  { id: 'lac', name: 'Le Lac de la Dame', level: 30 },
+  { id: 'tour', name: 'La Tour de Merlin', level: 120 },
+];
+export const placeOpen = (s, p) => !p.level || !!s.levels[p.level];
 
 export const goldFor = movesLeft => (movesLeft >= 10 ? movesLeft * 2 : movesLeft);

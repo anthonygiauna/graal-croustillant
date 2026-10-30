@@ -351,6 +351,44 @@ export function scene(theme) {
       <path d="M60 250 q40 18 80 0 l-8 12 h-64 Z" fill="#a8693a" stroke="${INK}" stroke-width="3"/>
       <path d="M100 248 v-40 m0 6 q30 10 50 50" stroke="${INK}" stroke-width="2.5" fill="none"/>
       <path d="M0 215 q100 -10 200 0 t200 0" stroke="#fff" stroke-width="8" opacity=".5" fill="none"/>`,
+    // Pont de l'Épée : une lame géante au-dessus d'un gouffre
+    pont: `<rect width="400" height="300" fill="#d8e4f0"/><circle cx="330" cy="60" r="26" fill="#fff6d0"/>
+      <path d="M0 150 L120 150 L150 300 L0 300Z M400 150 L280 150 L250 300 L400 300Z" fill="#8a7a6a" stroke="${INK}" stroke-width="4"/>
+      <path d="M150 300 L170 200 L230 200 L250 300Z" fill="#3a2a3a"/>
+      <path d="M110 150 L290 146 L300 150 L290 154 L110 154Z" fill="#e8eef4" stroke="${INK}" stroke-width="3"/>
+      <rect x="96" y="140" width="14" height="24" fill="#f5c53a" stroke="${INK}" stroke-width="3"/><rect x="84" y="148" width="12" height="8" fill="#2f5fb3" stroke="${INK}" stroke-width="2"/>
+      <path d="M30 150 v-40 l20 -14 l20 14 v40Z M330 150 v-40 l20 -14 l20 14 v40Z" fill="#c9b184" stroke="${INK}" stroke-width="3"/>`,
+    // Val sans Retour : vallée brumeuse, arbres sombres, brume violette
+    val: `<rect width="400" height="300" fill="#d4e0c8"/>
+      <path d="M0 120 L120 250 L280 250 L400 120 L400 300 L0 300Z" fill="#5a8a4a" stroke="${INK}" stroke-width="4"/>
+      ${[20, 70, 330, 380].map((x, k) => `<path d="M${x} ${180 - k % 2 * 20} l-22 50 h44Z M${x} ${150 - k % 2 * 20} l-18 44 h36Z" fill="#2e5a3a" stroke="${INK}" stroke-width="3"/>`).join('')}
+      <ellipse cx="200" cy="230" rx="170" ry="26" fill="#b8a0e0" opacity=".7"/><ellipse cx="200" cy="200" rx="120" ry="16" fill="#d8c8f4" opacity=".7"/>
+      ${[[150, 236], [250, 226], [200, 246]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="3" fill="#fff6a0"/>`).join('')}`,
+    // Tour de Merlin : tour de brume dans la forêt, nuit étoilée
+    tour: `<rect width="400" height="300" fill="#2a3a6a"/>
+      ${[[40, 40], [90, 90], [150, 30], [260, 50], [330, 100], [370, 30]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="2.5" fill="#fff"/>`).join('')}
+      <circle cx="320" cy="70" r="22" fill="#fff4c0"/>
+      <path d="M0 250 Q200 230 400 250 L400 300 L0 300Z" fill="#2e4a3a"/>
+      <path d="M170 250 L178 80 L222 80 L230 250Z" fill="#c8d8f0" opacity=".85" stroke="${INK}" stroke-width="4"/>
+      <path d="M170 82 L200 40 L230 82Z" fill="#4b3a8c" stroke="${INK}" stroke-width="4"/>
+      <rect x="192" y="110" width="16" height="22" rx="8" fill="#ffe680" stroke="${INK}" stroke-width="2"/>
+      <ellipse cx="200" cy="200" rx="80" ry="18" fill="#fff" opacity=".25"/><ellipse cx="200" cy="160" rx="60" ry="12" fill="#fff" opacity=".2"/>
+      ${[40, 100, 300, 360].map(x => `<path d="M${x} 250 l-24 -70 l24 -40 l24 40 l-24 70Z" fill="#1e3a2a" stroke="${INK}" stroke-width="3"/>`).join('')}`,
+    // Tintagel : château sur la falaise, mer et mouettes
+    tintagel: `<rect width="400" height="300" fill="#bfe0f4"/>
+      <rect y="200" width="400" height="100" fill="#3a8ac0"/>
+      <path d="M220 300 L240 150 L300 120 L400 130 L400 300Z" fill="#8a7a5a" stroke="${INK}" stroke-width="4"/>
+      <path d="M255 150 v-40 h70 v40Z" fill="#c9b184" stroke="${INK}" stroke-width="4"/>
+      <path d="M280 110 v-30 l10 -12 l10 12 v30Z" fill="#c9b184" stroke="${INK}" stroke-width="3"/><path d="M290 68 v-14 l14 4 -14 4" fill="#d63a2f" stroke="${INK}" stroke-width="2"/>
+      <path d="M0 230 q40 -10 80 0 t80 0 t80 0 M0 260 q40 -10 80 0 t80 0" stroke="#fff" stroke-width="4" fill="none" opacity=".6"/>
+      ${[[80, 80], [120, 60], [160, 95]].map(([x, y]) => `<path d="M${x - 10} ${y} q5 -6 10 0 q5 -6 10 0" stroke="${INK}" stroke-width="2.5" fill="none"/>`).join('')}`,
+    // Plaine de Salisbury : cercle de grandes pierres
+    salisbury: `<rect width="400" height="300" fill="#ffe2b8"/><circle cx="80" cy="80" r="34" fill="#fff0c0"/>
+      <path d="M0 200 Q200 170 400 200 L400 300 L0 300Z" fill="#9ccc65" stroke="${INK}" stroke-width="4"/>
+      ${[[60, 200], [120, 186], [280, 186], [340, 200], [170, 196], [230, 196]].map(([x, y]) => `<rect x="${x - 14}" y="${y - 60}" width="28" height="62" fill="#b8b0a4" stroke="${INK}" stroke-width="3"/>`).join('')}
+      <rect x="106" y="120" width="88" height="14" fill="#b8b0a4" stroke="${INK}" stroke-width="3"/><rect x="216" y="120" width="88" height="14" fill="#b8b0a4" stroke="${INK}" stroke-width="3"/>
+      <path d="M200 196 v-56" stroke="#e8eef4" stroke-width="6"/><rect x="190" y="136" width="20" height="6" fill="#f5c53a" stroke="${INK}" stroke-width="2"/>
+      <ellipse cx="200" cy="200" rx="18" ry="6" fill="#8a8278" stroke="${INK}" stroke-width="2"/>`,
   }[theme] || '';
   return `<svg width="400" height="300" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">${body}</svg>`;
 }

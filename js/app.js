@@ -1,8 +1,9 @@
 // Interface du jeu : écrans, partie, progression, personnages, trophées, réglages.
 import * as E from './engine.js';
 import { loadLevels } from './levels.js';
-import { CHARACTERS, TROPHIES, DIALOGUES, TUTORIALS, MERLIN_QUIPS, SHUFFLE_QUIPS, WIN_QUIPS, LOSE_QUIPS, COMBO_WORDS, DECOR, goldFor, unlockText, starsTotal } from './data.js';
+import { CHARACTERS, TROPHIES, DIALOGUES, TUTORIALS, MERLIN_QUIPS, SHUFFLE_QUIPS, WIN_QUIPS, LOSE_QUIPS, COMBO_WORDS, DECOR, PLACES, placeOpen, goldFor, unlockText, starsTotal } from './data.js';
 import { courtyard, DECOR_VIEW } from './courtyard.js';
+import { lakeScene, towerScene, PLACE_VIEW } from './places.js';
 import { portrait, medal, scene, svgUrl, pieceIcon, merlinFace, narratorIcon } from './art.js';
 import { play, unlockAudio, setSfx, setMusic, vibrate } from './audio.js';
 import { BoardView } from './board.js';
@@ -13,9 +14,12 @@ const main = $('#main'), modalEl = $('#modal');
 const pick = a => a[Math.floor(Math.random() * a.length)];
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const charById = id => CHARACTERS.find(c => c.id === id);
-const THEMES = ['cour', 'foret', 'lac', 'marais', 'morgane', 'quete', 'avalon', 'mordred', 'corbenic'];
+const THEMES = ['cour', 'foret', 'lac', 'marais', 'morgane', 'quete', 'avalon', 'mordred', 'corbenic',
+  'pont', 'val', 'tour', 'tintagel', 'salisbury', 'cour'];
 const LAST = () => DATA.levels.length;
-const EPILOGUES = { fin: 'quete', fin2: 'corbenic' }; // fin : après le niveau 60, fin2 : après le dernier niveau
+// Fins d'histoire : niveau → dialogue (décor de l'épilogue dans EPILOGUES). La dernière mène à la carte.
+const ENDINGS = { 60: 'fin', 90: 'fin2', 150: 'fin3' };
+const EPILOGUES = { fin: 'quete', fin2: 'corbenic', fin3: 'cour' };
 // Décor d'un chapitre ; la cour du château montre les compagnons débloqués et les décorations achetées.
 const camelotSvg = () => courtyard({ chars: CHARACTERS.filter(c => S.unlocked.includes(c.id)), decor: S.decor || [] });
 const sceneOf = theme => (theme === 'cour' ? camelotSvg() : scene(theme));
@@ -108,7 +112,7 @@ function title() {
     </div>
     <nav class="menu">
       <button class="btn big gold" data-act="map">${S.levels[1] ? 'Continuer' : 'Jouer'}</button>
-      <button class="btn" data-act="camelot">Restaurer Kaamelott <small>${S.gold || 0} pièces d'or</small></button>
+      <button class="btn" data-act="camelot">Restaurer le royaume <small>${S.gold || 0} pièces d'or</small></button>
       <button class="btn" data-act="gallery">Personnages <small>${S.unlocked.length} / ${CHARACTERS.length}</small></button>
       <button class="btn" data-act="trophies">Salle des trophées <small>${Object.keys(S.trophies).length} / ${TROPHIES.length}</small></button>
       <button class="btn" data-act="settings">Réglages</button>
@@ -147,7 +151,7 @@ function mapScreen(focus) {
   main.innerHTML = `<div class="screen map">
     <header class="bar"><button class="btn icon" data-act="title" aria-label="Retour">‹</button><h2>Carte du royaume</h2><span class="pill">★ ${starsTotal(S)} / ${LAST() * 3}</span></header>
     <div class="map-scroll" id="mapScroll">${chapters}
-      ${S.levels[60] ? `<div class="the-end"><h3>${S.levels[LAST()] ? 'Le Graal est rentré à la maison !' : 'Le Graal est retrouvé !'}</h3><div class="row"><button class="btn" data-act="story" data-ch="fin">Revoir la fin du chapitre 6</button>${S.levels[LAST()] ? '<button class="btn" data-act="story" data-ch="fin2">Revoir la grande fin</button>' : ''}</div></div>` : ''}
+      ${S.levels[60] ? `<div class="the-end"><h3>Les fins déjà vues</h3><div class="row">${Object.entries(ENDINGS).filter(([lvl]) => S.levels[lvl]).map(([lvl, key]) => `<button class="btn" data-act="story" data-ch="${key}">Fin du niveau ${lvl}</button>`).join('')}</div></div>` : ''}
     </div></div>`;
   const node = document.querySelector(`.node[data-id="${focus || cur}"]`);
   if (node) node.scrollIntoView({ block: 'center' });
@@ -174,7 +178,7 @@ function dialogue(key, then) {
       </div>
       <div class="dlg-line ${k % 2 ? 'right' : ''}" data-act="dlgNext">
         <div class="portrait">${pic}</div>
-        <div class="dlg-bubble"><b>${esc(name)}</b><p>${esc(text)}</p><small>Touchez pour continuer · ${k + 1}/${lines.length}</small></div>
+        <div class="dlg-bubble"><b>${esc(name)}</b><p>${esc(text.replace("{nom}", S.name || "notre héroïne"))}</p><small>Touchez pour continuer · ${k + 1}/${lines.length}</small></div>
       </div>
       <button class="btn small skip" data-act="dlgSkip">Passer ›</button>`, 'dialogue');
   };
@@ -474,20 +478,37 @@ function giveUp() {
     <div class="row"><button class="btn" data-act="map">Carte</button><button class="btn big gold" data-act="go" data-id="${G.id}">Réessayer</button></div>`, 'result lose');
 }
 
-// ---------- Restaurer Kaamelott (récompenses des coups d'avance) ----------
-function camelotScreen() {
+// ---------- Restaurer le royaume (récompenses des coups d'avance) ----------
+let currentPlace = 'kaamelott';
+
+// Image d'un lieu : view (une partie seulement) sert aux aperçus de la liste.
+function placeSvg(place, decor, view = null) {
+  if (place === 'lac') return lakeScene({ decor, view: view && PLACE_VIEW[view] });
+  if (place === 'tour') return towerScene({ decor, view: view && PLACE_VIEW[view] });
+  return courtyard({ chars: view ? [] : CHARACTERS.filter(c => S.unlocked.includes(c.id)), decor, layout: 'full', view: view && DECOR_VIEW[view] });
+}
+
+function camelotScreen(place = currentPlace) {
   stopGame();
+  const p = PLACES.find(x => x.id === place && placeOpen(S, x)) || PLACES[0];
+  currentPlace = p.id;
   const owned = S.decor || [];
+  const items = DECOR.filter(d => d.place === p.id);
+  const done = items.filter(d => owned.includes(d.id)).length;
   main.innerHTML = `<div class="screen list-screen">
-    <header class="bar"><button class="btn icon" data-act="title" aria-label="Retour">‹</button><h2>Restaurer Kaamelott</h2><span class="pill"><span class="coin"></span> ${S.gold || 0}</span></header>
+    <header class="bar"><button class="btn icon" data-act="title" aria-label="Retour">‹</button><h2>Restaurer le royaume</h2><span class="pill"><span class="coin"></span> ${S.gold || 0}</span></header>
     <div class="scroll">
-      <div class="camelot-view">${courtyard({ chars: CHARACTERS.filter(c => S.unlocked.includes(c.id)), decor: owned, layout: 'full' })}</div>
-      <p class="camelot-help">Chaque coup d'avance à la fin d'un niveau rapporte une pièce d'or (le double à partir de 10 coups). Les compagnons débloqués s'installent dans la cour.</p>
-      <ul class="decor-list">${DECOR.map(d => {
+      <div class="place-tabs" role="tablist">${PLACES.map(x => {
+        const open = placeOpen(S, x), n = DECOR.filter(d => d.place === x.id), got = n.filter(d => owned.includes(d.id)).length;
+        return `<button class="place-tab${x.id === p.id ? ' on' : ''}${open ? '' : ' locked'}" role="tab" aria-selected="${x.id === p.id}" data-act="${open ? 'place' : 'placeLocked'}" data-id="${x.id}">
+          <b>${esc(x.name)}</b><small>${open ? `${got} / ${n.length} réparé${got > 1 ? 's' : ''}` : `Niveau ${x.level}`}</small></button>`;
+      }).join('')}</div>
+      <div class="camelot-view place-${p.id}">${placeSvg(p.id, owned)}</div>
+      <p class="camelot-help">${esc(p.name)} : ${done} réparation${done > 1 ? 's' : ''} sur ${items.length}. Chaque coup d'avance à la fin d'un niveau rapporte une pièce d'or (le double à partir de 10 coups).</p>
+      <ul class="decor-list">${items.map(d => {
         const have = owned.includes(d.id), afford = (S.gold || 0) >= d.cost;
-        const thumb = courtyard({ decor: [...owned, d.id], layout: 'full', view: DECOR_VIEW[d.id] });
-        return `<li class="${have ? 'on' : ''}"><span class="decor-thumb${have ? '' : ' preview'}" aria-hidden="true">${thumb}</span><div><b>${esc(d.name)}</b><small>${esc(d.desc)}</small></div>
-          ${have ? '<span class="owned">✔ Installé</span>' : `<button class="btn small ${afford ? 'gold' : ''}" data-act="buyDecor" data-id="${d.id}" aria-label="Installer pour ${d.cost} pièces d'or"><span class="coin"></span> ${d.cost}</button>`}</li>`;
+        return `<li class="${have ? 'on' : ''}"><span class="decor-thumb${have ? '' : ' preview'}" aria-hidden="true">${placeSvg(p.id, [...owned, d.id], d.id)}</span><div><b>${esc(d.name)}</b><small>${esc(d.desc)}</small></div>
+          ${have ? '<span class="owned">✔ Réparé</span>' : `<button class="btn small ${afford ? 'gold' : ''}" data-act="buyDecor" data-id="${d.id}" aria-label="Réparer pour ${d.cost} pièces d'or"><span class="coin"></span> ${d.cost}</button>`}</li>`;
       }).join('')}</ul>
     </div></div>`;
 }
@@ -502,8 +523,8 @@ function buyDecor(id) {
   S.decor = [...(S.decor || []), id];
   play('unlock');
   checkTrophies(); persist();
-  toast(`<div><b>${esc(d.name)}</b><small>Installé à Kaamelott !</small></div>`);
-  camelotScreen();
+  toast(`<div><b>${esc(d.name)}</b><small>Réparé : ${esc(PLACES.find(p => p.id === d.place).name)} !</small></div>`);
+  camelotScreen(d.place);
 }
 
 // ---------- Galerie, trophées, réglages ----------
@@ -567,6 +588,8 @@ function settings() {
 const ACT = {
   title, map: () => { closeModal(); mapScreen(); }, gallery, trophies, settings, camelot: () => camelotScreen(),
   buyDecor: b => buyDecor(b.dataset.id),
+  place: b => camelotScreen(b.dataset.id),
+  placeLocked: b => toast(`<div><b>Pas encore accessible</b><small>${esc(PLACES.find(p => p.id === b.dataset.id).name)} s'ouvre au niveau ${PLACES.find(p => p.id === b.dataset.id).level}.</small></div>`),
   closeModal,
   level: b => prepare(+b.dataset.id),
   locked: () => toast('<div><b>Pas encore !</b><small>Termine d\'abord le niveau précédent.</small></div>'),
@@ -581,8 +604,7 @@ const ACT = {
     const id = +b.dataset.id;
     closeModal();
     showUnlocks(() => {
-      if (id === LAST()) return dialogue('fin2', () => mapScreen(id));
-      if (id === 60) return dialogue('fin', () => prepare(61));
+      if (ENDINGS[id]) return dialogue(ENDINGS[id], () => (id === LAST() ? mapScreen(id) : prepare(id + 1)));
       prepare(id + 1);
     });
   },

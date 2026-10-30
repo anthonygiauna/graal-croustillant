@@ -269,3 +269,15 @@ test('pouvoirs de Keu, Tristan et Galaad', () => {
   eq(g3.cells.filter(p => p && p.sp === 'bomb').length >= 2, true, 'deux Catapultes');
   assert(noEmpty(g2));
 });
+
+test('pouvoirs de Bédivère (diagonales) et Iseut (3 spéciales)', () => {
+  const g = grid();
+  const ev = [];
+  assert(usePower(g, 'diag', at(3, 3), ev));
+  eq(firstClear(ev).cleared.length >= 14, true, 'deux diagonales depuis (3,3) : 8 + 7 cases, dont une commune');
+  assert(noEmpty(g));
+  eq(usePower(grid(), 'diag', null, []), false, 'il faut choisir une case');
+  const g2 = grid();
+  assert(usePower(g2, 'mix3', null, []));
+  eq(g2.cells.filter(p => p && p.sp).length >= 3, true, 'trois pièces spéciales');
+});

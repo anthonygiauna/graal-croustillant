@@ -1,10 +1,10 @@
 // Service worker : le jeu fonctionne hors ligne une fois ouvert une première fois.
 // Avec du réseau, on prend toujours la dernière version publiée (et on la garde pour le hors-ligne) ;
 // sans réseau, ou si le réseau met plus de 3 secondes, on sert la copie gardée.
-const VERSION = 'graal-v6';
+const VERSION = 'graal-v7';
 const FILES = [
   './', 'index.html', 'style.css', 'manifest.webmanifest', 'data/levels.json',
-  'js/app.js', 'js/courtyard.js', 'js/engine.js', 'js/levels.js', 'js/data.js', 'js/art.js', 'js/audio.js', 'js/board.js', 'js/save.js',
+  'js/app.js', 'js/courtyard.js', 'js/places.js', 'js/engine.js', 'js/levels.js', 'js/data.js', 'js/art.js', 'js/audio.js', 'js/board.js', 'js/save.js',
   'icons/icon.svg', 'icons/icon-180.png', 'icons/icon-192.png', 'icons/icon-512.png',
 ];
 

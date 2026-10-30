@@ -296,3 +296,16 @@ body {
 .t-avalon .path { background: linear-gradient(#ece4f8, #dcd0f0); }
 .t-mordred .path { background: linear-gradient(#e8c8c0, #d8b0a8); }
 .t-corbenic .path { background: linear-gradient(#ffe8d8, #ffd8c4); }
+.t-pont .path { background: linear-gradient(#e4ecf6, #d0dcec); }
+.t-val .path { background: linear-gradient(#e0ead4, #d0dcc4); }
+.t-tour .path { background: linear-gradient(#d8dcf0, #c4cae8); }
+.t-tintagel .path { background: linear-gradient(#dceef8, #c8e2f2); }
+.t-salisbury .path { background: linear-gradient(#fff0d8, #ffe4c0); }
+/* Lieux à restaurer */
+.place-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
+.place-tab { display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 0; padding: 8px 4px; border: 3px solid var(--ink); border-radius: 14px; background: #fff8e6; color: var(--ink); font-family: var(--serif); cursor: pointer; text-align: center; }
+.place-tab b { font-size: 14px; line-height: 1.15; }
+.place-tab small { font: 700 12px var(--sans); opacity: .75; }
+.place-tab.on { background: linear-gradient(#ffe27a, var(--gold)); box-shadow: 0 0 0 3px var(--gold2); }
+.place-tab.locked { background: #e6dcc6; opacity: .7; }
+.camelot-view.place-lac, .camelot-view.place-tour { aspect-ratio: 360 / 480; }
